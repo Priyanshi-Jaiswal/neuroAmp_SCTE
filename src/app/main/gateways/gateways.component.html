@@ -1,0 +1,49 @@
+<div class="main-container">
+    <div class="div-container">
+    <div class="half-page-container table-container" #tableContainer>
+        <div class="user">
+            <div class="userstory">
+                <h6>Gateways</h6>
+            </div>
+
+            <div>
+                <div class="buttons">
+                    <div class="icon-group left-group">
+                        <button mat-icon-button class="button" matTooltip="Add Gateway"
+                            (click)="navigateToAddGatewayPage()">
+                            <mat-icon>add_box</mat-icon>
+                        </button>
+                        <button mat-icon-button class="button" matTooltip="Edit" (click)="navigateToEditGatewayPage()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button class="button" matTooltip="Delete" (click)="deleteGateway()">
+                            <mat-icon>delete_forever</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <ag-grid-angular class="ag-theme-quartz table" [rowData]="rowData" [columnDefs]="colDefs" [pagination]="true"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" (rowSelected)="onRowSelected($event)"
+            rowSelection="multiple">
+        </ag-grid-angular>
+    </div>
+
+    <div class="half-page-container map-container" #mapContainer>
+        <div id="map" class="map">
+        </div>
+    </div>
+</div>
+</div>
+
+
+<app-alert-modal
+  *ngIf="modalConfig.show"
+  [message]="modalConfig.message"
+  [isError]="modalConfig.isError"
+  [showCancelButton]="modalConfig.showCancelButton"
+  (confirm)="onModalClose(true)"
+  (cancel)="onModalClose(false)">
+</app-alert-modal>

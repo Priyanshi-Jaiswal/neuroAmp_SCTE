@@ -1,0 +1,254 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+.dashboard-container-clean {
+  //font-family: 'Roboto', sans-serif;
+  //background-color: #f0f2f5;
+  background-color: #ffff;
+  min-height: 100vh;
+  padding: 1rem;
+  position: relative;
+}
+
+.dashboard-header-clean {
+  margin-bottom: 2rem;
+
+  .dashboard-title-clean {
+    margin: 0;
+    margin-top: -5px;
+    margin-left: 5px;
+    font-size: 1.25rem;
+  }
+}
+
+.charts-2-3-container {
+  width: 66.66%;
+  // margin: 0 auto;
+
+  @media (max-width: 992px) {
+    width: 100%;
+  }
+}
+
+.main-boxes-grid {
+  display: flex;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.loading-message-clean,
+.error-message-clean {
+  text-align: center;
+  color: #777;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
+
+.error-message-clean {
+  color: #d9534f;
+  font-weight: 500;
+}
+
+.styled-box-device {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #555;
+  padding: 0;
+  position: relative;
+  min-height: 150px;
+  width: 400px;
+  /* Decreased card minimum height */
+  display: flex;
+  flex-direction: column;
+
+.box-title-border {
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    //background-color: #f0f2f5;
+    background-color: #ffff;
+    padding: 0 8px;
+    font-size: 1.15rem;
+    z-index: 1;
+  }
+  
+  .box-content-wrapper {
+    flex-grow: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .chart-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+  }
+  
+  .chart-area {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    height: 150px;
+    /* Decreased chart area height */
+    margin: 1rem auto;
+    // margin-bottom: 1rem;
+    display: block;
+  }
+  
+  .chart-legend-inline {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  
+  .chart-total-device {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+  }
+}
+
+
+.styled-box-gateway {
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border: 1px solid #555;
+  padding: 0;
+  position: relative;
+  // min-height: 100px;
+   width: 400px;
+  /* Decreased card minimum height */
+  display: flex;
+  flex-direction: column;
+
+  .box-title-border {
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    background-color: #ffff;
+    padding: 0 8px;
+    font-size: 1.15rem;
+    z-index: 1;
+  }
+  
+  .box-content-wrapper {
+    flex-grow: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .chart-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+  }
+  
+  .chart-area {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    height: 225px;
+    /* Decreased chart area height */
+    margin: 1rem auto;
+    // margin-bottom: 1rem;
+    display: block;
+  }
+  
+  .chart-legend-inline {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    //gap: 1rem;
+    //font-size: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .chart-total-gateway {
+    margin-top: -1rem;
+    font-size: 0.75rem;
+  }
+}
+
+.legend-group {
+  display: flex;
+  align-items: center;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.legend-dot.green {
+  background-color: #5cb85c;
+}
+
+.legend-dot.red {
+  background-color: #d9534f;
+}
+
+.card-clean {
+  padding: 2.5rem;
+  margin-top: 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.card-left-section {
+  flex-shrink: 0;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 1.5rem;
+}
+
+.card-right-section {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card-icon-clean {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  svg {
+    width: 70px;
+    height: 70px;
+    color: rgb(13, 108, 217);
+    stroke-width: 2.5px;
+  }
+}
+
+.card-title-clean {
+  font-size: 2.5rem;
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.card-value-clean {
+  font-size: 2.5rem;
+  display: block;
+  margin-top: 1rem;
+}

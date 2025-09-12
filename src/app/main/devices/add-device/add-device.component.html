@@ -1,0 +1,1244 @@
+<div class="add-device-page-container card">
+    <div class="card-header add-device-header-custom">
+        <!-- <h6 class="card-title add-device-title-custom">Add Device</h6> -->
+        <h6 class="card-title add-device-title-custom">ADD DEVICE / {{ name || '[New Device]' }}</h6>
+    </div>
+
+    <div class="card-body add-device-body-custom row no-gutters">
+        <div class="col-md-3 add-device-sidebar-custom pr-4 border-end">
+            <div class="nav-vertical-custom">
+                <ul class="list-group">
+                    <li class="tab-item-custom list-group-item">
+                        <a [ngClass]="{ 'active-tab-link-custom': activeVerticalTab === 'General' }"
+                            (click)="setActiveVerticalTab('General')"
+                            class="tab-link-custom list-group-item-action">General</a>
+                    </li>
+                    <li *ngIf="isScte283" class="tab-item-custom list-group-item">
+                        <a [ngClass]="{'active-tab-link-custom': activeVerticalTab === 'SCTE283'}"
+                            (click)="setActiveVerticalTab('SCTE283')" class="tab-link-custom list-group-item-action">
+                            SCTE283
+                        </a>
+                    </li>
+                    <li class="tab-item-custom list-group-item">
+                        <a [ngClass]="{ 'active-tab-link-custom': activeVerticalTab === 'LoRaWAN' }"
+                            (click)="setActiveVerticalTab('LoRaWAN')"
+                            class="tab-link-custom list-group-item-action">LoRaWAN</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-9 form-content-area-custom pl-4 overflow-auto">
+            <div *ngIf="activeVerticalTab === 'General'" class="general-settings-card">
+                <h6 class="general-settings-heading">General Settings</h6>
+                <form class="nav-form">
+                    <div class="form-group form-check checkbox-group-custom">
+                        <input type="checkbox" class="form-check-input checkbox-input-custom" id="active" name="active"
+                            [(ngModel)]="active">
+                        <label class="form-check-label checkbox-label-custom" for="active">Active</label>
+                    </div>
+                    <div class="form-group input-group-custom">
+                        <label for="name" class="form-label label-custom">Name</label>
+                        <input type="text" class="form-control input-custom" id="name" name="name" [(ngModel)]="name">
+                    </div>
+                    <div class="form-group input-group-custom">
+                        <label for="devEUI" class="form-label label-custom">DevEUI</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control input-custom dev-eui-input-custom" id="devEUI"
+                                name="devEUI" [(ngModel)]="devEUI" style="min-width: 36rem;">
+                            <button class="btn btn-outline-secondary generate-btn-custom" type="button"
+                                (click)="generateDevEUI()">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="lucide lucide-rotate-cw">
+                                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                                    <path d="M21 3v5h-5" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group input-group-custom">
+                        <label for="gateway" class="form-label label-custom">Gateway</label>
+                        <select id="gateway" [(ngModel)]="selectedGateway" name="gateway"
+                            class="form-control input-custom dropdown-input" required>
+                            <option [ngValue]="null" disabled>Select a Gateway</option>
+                            <option *ngFor="let gate of gateway" [ngValue]="gate">{{ gate.name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group input-group-custom">
+                        <label for="region" class="form-label label-custom">Region</label>
+                        <select id="region" name="region" [(ngModel)]="region"
+                            class="form-control input-custom dropdown-input">
+                            <option value="" disabled selected>Select a Region</option>
+                            <option *ngFor="let opt of regionOptions" [value]="opt">{{ opt }}</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="card-footer add-device-footer-custom">
+                    <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                        Save & Next
+                    </button>
+                </div>
+            </div>
+
+
+            <div *ngIf="activeVerticalTab === 'LoRaWAN'" class="lorawan-settings-container">
+
+                <ul class="nav nav-tabs lo-ra-wan-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Activation' }"
+                            (click)="setActiveLoRaWANTab('Activation')">Activation</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Class' }"
+                            (click)="setActiveLoRaWANTab('Class')">Class</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Frame settings' }"
+                            (click)="setActiveLoRaWANTab('Frame settings')">Frame</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Features' }"
+                            (click)="setActiveLoRaWANTab('Features')">Feature</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Location' }"
+                            (click)="setActiveLoRaWANTab('Location')">Location</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Payload' }"
+                            (click)="setActiveLoRaWANTab('Payload')">Payload</a>
+                    </li>
+                </ul>
+
+                <div class="lorawan-tab-content">
+                    <div *ngIf="activeSettingTab === 'Activation'" class="general-settings-card">
+                        <h6 class="general-settings-heading">Activation Settings</h6>
+                        <form class="nav-form">
+                            <div class="form-group form-check checkbox-group-custom">
+                                <input type="checkbox" class="form-check-input checkbox-input-custom" id="otaaSupported"
+                                    name="otaaSupported" [(ngModel)]="otaaSupported">
+                                <label class="form-check-label checkbox-label-custom" for="otaaSupported">Otaa
+                                    supported</label>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="appKey" class="form-label label-custom">App Key</label>
+                                <div class="input-group">
+                                    <input [type]="showAppKey ? 'text' : 'password'" class="form-control input-custom"
+                                        id="appKey" name="appKey" [(ngModel)]="appKey">
+                                    <button class="btn btn-outline-secondary icon-btn-custom" type="button"
+                                        (click)="toggleAppKeyVisibility()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
+                                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-outline-secondary generate-btn-custom" type="button"
+                                        (click)="generateAppKey()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-rotate-cw">
+                                            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                                            <path d="M21 3v5h-5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="devAddr" class="form-label label-custom">DevAddr</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control input-custom" id="devAddr" name="devAddr"
+                                        [(ngModel)]="devAddr" style="min-width: 44rem; background-color: #f2f2f2;"
+                                        disabled>
+                                    <button class="btn btn-outline-secondary generate-btn-custom" type="button"
+                                        (click)="generateDevAddr()" style="background-color: #f2f2f2;" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-rotate-cw">
+                                            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                                            <path d="M21 3v5h-5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="nwkSKey" class="form-label label-custom">NwkSKey</label>
+                                <div class="input-group">
+                                    <input [type]="showNwkSKey ? 'text' : 'password'" class="form-control input-custom"
+                                        id="nwkSKey" name="nwkSKey" [(ngModel)]="nwkSKey"
+                                        style="background-color: #f2f2f2;" disabled>
+                                    <button class="btn btn-outline-secondary icon-btn-custom" type="button"
+                                        (click)="toggleNwkSKeyVisibility()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
+                                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-outline-secondary generate-btn-custom" type="button"
+                                        (click)="generateNwkSKey()" style="background-color: #f2f2f2;" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-rotate-cw">
+                                            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                                            <path d="M21 3v5h-5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="appSKey" class="form-label label-custom">AppSKey</label>
+                                <div class="input-group">
+                                    <input [type]="showAppSKey ? 'text' : 'password'" class="form-control input-custom"
+                                        id="appSKey" name="appSKey" [(ngModel)]="appSKey"
+                                        style="background-color: #f2f2f2;" disabled>
+                                    <button class="btn btn-outline-secondary icon-btn-custom" type="button"
+                                        (click)="toggleAppSKeyVisibility()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye">
+                                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                            <circle cx="12" cy="12" r="3" />
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-outline-secondary generate-btn-custom" type="button"
+                                        (click)="generateAppSKey()" style="background-color: #f2f2f2;" disabled>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-rotate-cw">
+                                            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+                                            <path d="M21 3v5h-5" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="card-footer add-device-footer-custom">
+                            <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                                Save & Next
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="activeSettingTab === 'Class'" class="general-settings-card">
+                        <h6 class="general-settings-heading">Class A Settings</h6>
+                        <form class="nav-form">
+                            <h4 class="sub-heading-custom">RX1's Settings</h4>
+
+                            <div class="form-group input-group-custom">
+                                <label for="rx1Delay" class="form-label label-custom classA-label">Delay</label>
+                                <input type="number" class="form-control input-custom" id="rx1Delay" name="rx1Delay"
+                                    [(ngModel)]="rx1Delay"
+                                    placeholder="Value in milliseconds. Default value is 1 second.">
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="rx1Duration" class="form-label label-custom classA-label">Duration</label>
+                                <input type="number" class="form-control input-custom" id="rx1Duration"
+                                    name="rx1Duration" [(ngModel)]="rx1Duration"
+                                    placeholder="Value in milliseconds. Default value is 3 seconds.">
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="rx1DataRateOffset" class="form-label label-custom classA-label">Data Rate
+                                    offset</label>
+                                <select id="rx1DataRateOffset" name="rx1DataRateOffset" [(ngModel)]="rx1DataRateOffset"
+                                    class="form-control input-custom dropdown-input">
+                                    <option value="" disabled selected></option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+
+                            <h4 class="sub-heading-custom">RX2's Settings</h4>
+
+                            <div class="form-group input-group-custom">
+                                <label for="rx2Delay" class="form-label label-custom classA-label">Delay</label>
+                                <input type="number" class="form-control input-custom" id="rx2Delay" name="rx2Delay"
+                                    [(ngModel)]="rx2Delay"
+                                    placeholder="Value in milliseconds. Default value is 1 second.">
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="rx2Duration" class="form-label label-custom classA-label">Duration</label>
+                                <input type="number" class="form-control input-custom" id="rx2Duration"
+                                    name="rx2Duration" [(ngModel)]="rx2Duration"
+                                    placeholder="Value in milliseconds. Default value is 3 seconds.">
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="channelFrequency" class="form-label label-custom classA-label">Channel
+                                    frequency</label>
+                                <input type="number" class="form-control input-custom" id="channelFrequency"
+                                    name="channelFrequency" [(ngModel)]="channelFrequency">
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="dataRate" class="form-label label-custom classA-label">Data Rate</label>
+                                <select id="dataRate" name="dataRate" [(ngModel)]="dataRate"
+                                    class="form-control input-custom dropdown-input">
+                                    <option value="" disabled selected></option>
+                                    <option value="DR0">DR0</option>
+                                    <option value="DR1">DR1</option>
+                                    <option value="DR2">DR2</option>
+                                    <option value="DR3">DR3</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="ackTimeout" class="form-label label-custom classA-label">ACK Timeout</label>
+                                <input type="number" class="form-control input-custom" id="ackTimeout" name="ackTimeout"
+                                    [(ngModel)]="ackTimeout"
+                                    placeholder="Correct value between 1 and 3 seconds.Default value is 2 seconds.">
+                            </div>
+
+                            <h6 class="general-settings-heading">Class B Settings</h6>
+                            <div class="form-group form-check checkbox-group-custom" style="margin-left: 1rem;">
+                                <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                    id="classBSupported" name="classBSupported" [(ngModel)]="classBSupported">
+                                <label class="form-check-label checkbox-label-custom" for="classBSupported">Device
+                                    Supports Class
+                                    B</label>
+                            </div>
+
+                            <h6 class="general-settings-heading">Class C Settings</h6>
+                            <div class="form-group form-check checkbox-group-custom" style="margin-left: 1rem;">
+                                <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                    id="classCSupported" name="classCSupported" [(ngModel)]="classCSupported">
+                                <label class="form-check-label checkbox-label-custom" for="classCSupported">Device
+                                    Supports Class
+                                    C</label>
+                            </div>
+
+                            <div class="card-footer add-device-footer-custom">
+                                <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                                    Save & Next
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div *ngIf="activeSettingTab === 'Frame settings'" class="general-settings-card">
+                        <h6 class="general-settings-heading">Frame Settings</h6>
+                        <form class="nav-form">
+                            <h5 class="sub-heading-custom">Uplink</h5>
+
+                            <div class="form-group input-group-custom">
+                                <label for="uplinkDataRate" class="form-label label-custom classA-label">Data
+                                    Rate</label>
+                                <select id="uplinkDataRate" name="uplinkDataRate" [(ngModel)]="uplinkDataRate"
+                                    class="form-control input-custom dropdown-input">
+                                    <option value="" disabled selected></option>
+                                    <option value="DR0">DR0</option>
+                                    <option value="DR1">DR1</option>
+                                    <option value="DR2">DR2</option>
+                                    <option value="DR3">DR3</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="fPort" class="form-label label-custom classA-label">FPort</label>
+                                <input type="number" class="form-control input-custom" id="fPort" name="fPort"
+                                    [(ngModel)]="fPort" placeholder="Correct value between 1 and 223">
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="retransmission"
+                                    class="form-label label-custom classA-label">Retransmission</label>
+                                <input type="number" class="form-control input-custom" id="retransmission"
+                                    name="retransmission" [(ngModel)]="retransmission"
+                                    placeholder="Retransmission for ConfirmedData Uplink">
+                            </div>
+                            <div class="form-group input-group-custom">
+                                <label for="fCnt" class="form-label label-custom classA-label">FCnt</label>
+                                <input type="number" class="form-control input-custom" id="fCnt" name="fCnt"
+                                    [(ngModel)]="fCnt" placeholder="Default value is 0">
+                            </div>
+                            <h5 class="sub-heading-custom">Downlink</h5>
+
+                            <div class="form-group form-check checkbox-group-custom">
+                                <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                    id="fCntDownDisable" name="fCntDownDisable" [(ngModel)]="fCntDownDisable">
+                                <label class="form-check-label checkbox-label-custom" for="fCntDownDisable">(FCntDown)
+                                    Disable
+                                    frame-counter validation.</label>
+                            </div>
+
+                            <div class="form-group input-group-custom">
+                                <label for="fCntDown" class="form-label label-custom classA-label">FCntDown</label>
+                                <input type="number" class="form-control input-custom" id="fCntDown" name="fCntDown"
+                                    [(ngModel)]="fCntDown" placeholder="FCntDown">
+                            </div>
+                        </form>
+                        <div class="card-footer add-device-footer-custom">
+                            <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                                Save & Next
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="activeSettingTab === 'Features'" class="general-settings-card">
+                        <h6 class="general-settings-heading">Feature Settings</h6>
+                        <form class="nav-form">
+                            <div class="form-group form-check checkbox-group-custom">
+                                <input type="checkbox" class="form-check-input checkbox-input-custom" id="adrEnabled"
+                                    name="adrEnabled" [(ngModel)]="adrEnabled">
+                                <label class="form-check-label checkbox-label-custom" for="active">ADR enabled</label>
+                            </div>
+                            <div class="form-group input-group-custom">
+                                <label for="rangeAntenna" class="form-label label-custom classA-label">Range
+                                    Antenna</label>
+                                <input type="number" class="form-control input-custom" id="rangeAntenna"
+                                    name="rangeAntenna" [(ngModel)]="rangeAntenna"
+                                    placeholder="Value in meters. Default value is 10000 m.">
+                            </div>
+                        </form>
+                        <div class="card-footer add-device-footer-custom">
+                            <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                                Save & Next
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div *ngIf="activeSettingTab === 'Location'" class="general-settings-card">
+                        <h6 class="general-settings-heading">Location Settings</h6>
+                        <form class="nav-form">
+                            <div class="map-container-wrapper">
+                                <div id="map" class="map-custom"></div>
+
+                                <div class="map-overlay-container" (mouseenter)="showSearchBox = true"
+                                    (mouseleave)="showSearchBox = false">
+                                    <button class="globe-button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-globe-2">
+                                            <path
+                                                d="M21.54 15H17a2 2 0 0 0-2 2v4.54M7 3.34V5a3 3 0 0 0 3 3h6M5.07 12H2v-.82A9 9 0 0 1 20.77 8M18.42 1.56L17.47 2.51M22.21 4.29L21.26 5.24M2.79 7.71L3.74 6.76M1.56 18.42l.95-.95M18 12h.01M12 18h.01M12 6h.01M6 12h.01M12 12h.01M12 3a9 9 0 0 0-9 9 9 9 0 0 0 9 9 9 9 0 0 0 9-9 9 9 0 0 0-9-9Z" />
+                                        </svg>
+                                    </button>
+                                    <div class="search-box" [class.show-search]="showSearchBox">
+                                        <input type="text" class="form-control address-input-custom"
+                                            placeholder="Enter address" [(ngModel)]="searchAddress"
+                                            name="searchAddress">
+                                        <button class="btn btn-primary locate-btn-custom" type="button"
+                                            (click)="searchLocation()">Locate</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group input-group-custom">
+                                <label for="latitude" class="form-label label-custom">Latitude</label>
+                                <input type="number" class="form-control input-custom" id="latitude" name="latitude"
+                                    placeholder="Latitude" [(ngModel)]="latitude" (ngModelChange)="onLatLngChange()">
+                            </div>
+
+
+                            <div class="form-group input-group-custom">
+                                <label for="longitude" class="form-label label-custom">Longitude</label>
+                                <input type="number" class="form-control input-custom" id="longitude" name="longitude"
+                                    placeholder="Longitude" [(ngModel)]="longitude" (ngModelChange)="onLatLngChange()">
+                            </div>
+
+
+                            <div class="form-group input-group-custom">
+                                <label for="altitude" class="form-label label-custom">Altitude</label>
+                                <input type="number" class="form-control input-custom" id="altitude" name="altitude"
+                                    placeholder="Altiitude" [(ngModel)]="altitude">
+                            </div>
+                        </form>
+                        <div class="card-footer add-device-footer-custom">
+                            <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                                Save & Next
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="activeSettingTab === 'Payload'" class="general-settings-card">
+                        <h6 class="general-settings-heading">Payload Settings</h6>
+                        <form class="nav-form">
+                            <div class="form-group input-group-custom">
+                                <label for="uplinkInterval" class="form-label label-custom">Uplink Interval</label>
+                                <input type="number" class="form-control input-custom" id="uplinkInterval"
+                                    name="uplinkInterval" [(ngModel)]="uplinkInterval"
+                                    placeholder="Value in seconds. Default value is 10 sec.">
+                            </div>
+
+                            <div class="form-group row mb-3 pt-3" style="margin-left: 8rem;">
+                                <div class="col-sm-12">
+                                    <p class="form-text text-muted mb-2">If the payload exceeds the maximum size allowed
+                                        by
+                                        regional
+                                        parameters:</p>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <div class="form-check form-check-inline me-4">
+                                        <input class="form-check-input" type="radio" name="payloadExceedsAction"
+                                            id="fragmentsFrame" value="fragments" [(ngModel)]="payloadExceedsAction">
+                                        <label class="form-check-label" for="fragmentsFrame">Fragments the frame</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="payloadExceedsAction"
+                                            id="truncatesFrame" value="truncates" [(ngModel)]="payloadExceedsAction">
+                                        <label class="form-check-label" for="truncatesFrame">Truncates the frame</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group input-group-custom" style="margin-left: 2rem;">
+                                <label for="mType" class="form-label label-custom">MType:</label>
+                                <div class="form-check form-check-inline me-4">
+                                    <input class="form-check-input" type="radio" name="mType" id="confirmedDataUp"
+                                        value="ConfirmedDataUp" [(ngModel)]="mType">
+                                    <label class="form-check-label" for="confirmedDataUp">ConfirmedDataUp</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="mType" id="unconfirmedDataUp"
+                                        value="UnConfirmedDataUp" [(ngModel)]="mType">
+                                    <label class="form-check-label" for="unconfirmedDataUp">UnConfirmedDataUp</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group input-group-custom" style="margin-left: 2rem;">
+                                <label for="payloadContent" class="form-label label-custom">Payload</label>
+                                <textarea class="form-control input-custom" id="payloadContent" name="payloadContent"
+                                    [(ngModel)]="payloadContent" rows="5"></textarea>
+                            </div>
+
+                            <div class="form-group row mb-3">
+                                <div class="col-sm-10 offset-sm-2">
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                            id="base64Encoded" name="base64Encoded" [(ngModel)]="base64Encoded">
+                                        <label class="form-check-label checkbox-label-custom" for="base64Encoded">Base64
+                                            encoded</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="card-footer add-device-footer-custom">
+                            <button (click)="saveAndClose()" class="btn btn-primary save-btn-custom">
+                                Save & Close
+                            </button>
+                            <button (click)="saveAndNew()" class="btn btn-primary save-btn-custom">
+                                Save & Add New
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="activeVerticalTab === 'SCTE283'" class="lorawan-settings-container">
+
+                <ul class="nav nav-tabs lo-ra-wan-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'System' }"
+                            (click)="setActiveSCTETab('System')">System</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'RF' }"
+                            (click)="setActiveSCTETab('RF')">RF</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'Networking' }"
+                            (click)="setActiveSCTETab('Networking')">Networking</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" [ngClass]="{ 'active': activeSettingTab === 'PNM' }"
+                            (click)="setActiveSCTETab('PNM')">PNM</a>
+                    </li>
+                </ul>
+
+                <div *ngIf="activeSettingTab === 'System'" class="general-settings-card">
+                    <div class="scte-list-container">
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('SystemCapabilities')">
+                            <span class="scte-item-heading">System Capabilities</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'SystemCapabilities'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'SystemCapabilities'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Amplifier Type</label>
+                                    <select id="amplifierType" name="amplifierType" [(ngModel)]="amplifierType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Unknown</option>
+                                        <option value="3">Multiport</option>
+                                        <option value="4">Line Extender</option>
+                                        <option value="5">Booster</option>
+                                        <option value="6">Compact</option>
+                                    </select>
+                                </div>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Power
+                                        Supply Redundancy</label>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Power Supply Redundancy Mode</label>
+                                    <select id="redundancyMode" name="redundancyMode" [(ngModel)]="redundancyMode"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Unknown</option>
+                                        <option value="3">Load Sharing</option>
+                                        <option value="4">Switched Redundant</option>
+                                    </select>
+                                </div>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Power
+                                        Saving Mode</label>
+                                </div>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Rf
+                                        Config File</label>
+                                </div>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Debug
+                                        File</label>
+                                </div>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Rf
+                                        Spectrum Capture</label>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('SystemStatus')">
+                            <span class="scte-item-heading">System Status</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'SystemStatus'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'SystemStatus'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <h4 class="sub-heading-custom">System Status</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Unique ID</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Current Date Time</label>
+                                    <input type="string" class="form-control input-custom" [value]="currentTime"
+                                        readonly>
+                                </div>
+                                <!-- <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Up Time</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div> -->
+
+                                <h4 class="sub-heading-custom">Identification</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Model Number</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Serial Number</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Device Alias</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Device Description</label>
+                                    <textarea type="string" class="form-control input-custom"></textarea>
+                                </div>
+
+                                <h4 class="sub-heading-custom">Vendor</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Name</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">OUI</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Version Summary</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Current Sw Version</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Boot Rom Version</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Hw Version</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Enclosure</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Is Open</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Sensor</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Id</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Name</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Sensor Type</label>
+                                    <select id="sensorType" name="sensorType" [(ngModel)]="sensorType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Unknown</option>
+                                        <option value="3">Volts AC</option>
+                                        <option value="4">Volts DC</option>
+                                        <option value="5">Amperes</option>
+                                        <option value="6">Watts</option>
+                                        <option value="7">Hertz</option>
+                                        <option value="8">Celsius</option>
+                                        <option value="9">Percent RH</option>
+                                        <option value="10">RPM</option>
+                                        <option value="11">CMM</option>
+                                        <option value="12">Truth Value</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Scale</label>
+                                    <select id="scale" name="scale" [(ngModel)]="scale"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Yocto</option>
+                                        <option value="2">Zepto</option>
+                                        <option value="3">Atto</option>
+                                        <option value="4">Femto</option>
+                                        <option value="5">Pico</option>
+                                        <option value="6">Nano</option>
+                                        <option value="7">Micro</option>
+                                        <option value="8">Milli</option>
+                                        <option value="9">Units</option>
+                                        <option value="10">Kilo</option>
+                                        <option value="11">Mega</option>
+                                        <option value="12">Giga</option>
+                                        <option value="13">Tera</option>
+                                        <option value="14">Exa</option>
+                                        <option value="15">Peta</option>
+                                        <option value="16">Zeta</option>
+                                        <option value="17">Yotta</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Precision</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Value</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Oper Status</label>
+                                    <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Unknown</option>
+                                        <option value="3">Up</option>
+                                        <option value="4">Down</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Units Display</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Value Time Stamp</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Value Update Rate</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Power Supply</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Id</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Description</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Oper Status</label>
+                                    <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Unknown</option>
+                                        <option value="3">Up</option>
+                                        <option value="4">Down</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Input Voltage</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Input Current</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Output Rail</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Id</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Description</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Oper Status</label>
+                                    <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Unknown</option>
+                                        <option value="3">Up</option>
+                                        <option value="4">Down</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Voltage</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Current</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('SystemCfg')">
+                            <span class="scte-item-heading">System Cfg</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'SystemCfg'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'SystemCfg'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <h4 class="sub-heading-custom">System Cfg</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Hostname</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">AssetId</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Description</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Cascade Position</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Location</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Description</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Latitude</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Longitude</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('ResetStatus')">
+                            <span class="scte-item-heading">Reset Status</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'ResetStatus'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'ResetStatus'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <h4 class="sub-heading-custom">Reset Capabilities</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Reset Types Supported</label>
+                                    <select id="type" name="type" [(ngModel)]="type"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Soft Reset</option>
+                                        <option value="2">Hard Reset</option>
+                                        <option value="3">NV Reset</option>
+                                        <option value="4">Factory Reset</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Reset History Size</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Reset History Status</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Index</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Reset Timestamp</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Type</label>
+                                    <select id="type" name="type" [(ngModel)]="type"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Soft Reset</option>
+                                        <option value="2">Hard Reset</option>
+                                        <option value="3">NV Reset</option>
+                                        <option value="4">Factory Reset</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Reason</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Event Id Ref</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Recovery Time</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('EventStatus')">
+                            <span class="scte-item-heading">Event Status</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'EventStatus'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'EventStatus'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <h4 class="sub-heading-custom">Event Capabilities</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Local Event Log Max Size</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Event Status</h4>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Throttle
+                                        Threshold Exceeded</label>
+                                </div>
+
+                                <h4 class="sub-heading-custom">Event</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Index</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">First Time</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Last Time</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Level</label>
+                                    <select id="evPriorityType" name="evPriorityType" [(ngModel)]="evPriorityType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Emergency</option>
+                                        <option value="2">Alert</option>
+                                        <option value="3">Critical</option>
+                                        <option value="4">Error</option>
+                                        <option value="5">Warning</option>
+                                        <option value="6">Notice</option>
+                                        <option value="7">Informational</option>
+                                        <option value="8">Debug</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Id</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Text</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Longitude</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Syslog</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Level</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Timestamp</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Host Name</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">NE Type</label>
+                                    <input type="string" class="form-control input-custom" id="neType" name="neType"
+                                        [(ngModel)]="neType">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Vendor</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Event ID</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Text</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Vendor Specific Text</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Event Syslog Status</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Index</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Server Address</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Level</label>
+                                    <select id="ipAddressOriginType" name="ipAddressOriginType"
+                                        [(ngModel)]="ipAddressOriginType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Static</option>
+                                        <option value="3">DHCP</option>
+                                        <option value="4">Link Layer</option>
+                                        <option value="5">Random</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('eventCfg')">
+                            <span class="scte-item-heading">Event Cfgs</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'eventCfg'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'eventCfg'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <h4 class="sub-heading-custom">Event Throttle Cfg</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Admin State</label>
+                                    <select id="eventThrottleAdminStateType" name="eventThrottleAdminStateType"
+                                        [(ngModel)]="eventThrottleAdminStateType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Unconstrained</option>
+                                        <option value="2">Maintain Below Threshold</option>
+                                        <option value="3">Stop At Threshold</option>
+                                        <option value="4">Inhibited</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Threshold</label>
+                                    <input type="number" class="form-control input-custom" id="threshold"
+                                        name="threshold" [(ngModel)]="threshold">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Interval</label>
+                                    <input type="number" class="form-control input-custom" id="interval" name="interval"
+                                        [(ngModel)]="interval">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Event Reporting Cfg</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Priority</label>
+                                    <select id="evPriorityType" name="evPriorityType" [(ngModel)]="evPriorityType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Emergency</option>
+                                        <option value="2">Alert</option>
+                                        <option value="3">Critical</option>
+                                        <option value="4">Error</option>
+                                        <option value="5">Warning</option>
+                                        <option value="6">Notice</option>
+                                        <option value="7">Informational</option>
+                                        <option value="8">Debug</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Reporting</label>
+                                    <select id="evReportingType" name="evReportingType" [(ngModel)]="evReportingType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Local</option>
+                                        <option value="2">Traps</option>
+                                        <option value="3">Syslog</option>
+                                        <option value="4">Local Volatile</option>
+                                        <option value="5">STD Interface</option>
+                                    </select>
+                                </div>
+
+                                <h4 class="sub-heading-custom">Syslog Server Cfg</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Index</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Server Address</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Admin State</label>
+                                    <select id="eventThrottleAdminStateType" name="eventThrottleAdminStateType"
+                                        [(ngModel)]="eventThrottleAdminStateType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Unconstrained</option>
+                                        <option value="2">Maintain Below Threshold</option>
+                                        <option value="3">Stop At Threshold</option>
+                                        <option value="4">Inhibited</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="scte-list-item" (click)="toggleSCTESystemRow('fileManagement')">
+                            <span class="scte-item-heading">File Management</span>
+                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'fileManagement'">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'fileManagement'" class="scte-item-form-container">
+                            <form class="nav-form">
+                                <h4 class="sub-heading-custom">File Capabilities</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Num Debug Files Supported</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Num RF Cfg Files Supported</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Num RF Spectrum Capture Files Supported</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">File Status</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">File Name</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">File Type</label>
+                                    <select id="fileType" name="fileType" [(ngModel)]="fileType"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Debug</option>
+                                        <option value="3">RF Cfg</option>
+                                        <option value="4">RF Spectrum Capture</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">File Status</label>
+                                    <select id="fileStatus" name="fileStatus" [(ngModel)]="fileStatus"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">Available For Upload</option>
+                                        <option value="3">Upload In Progress</option>
+                                        <option value="4">Upload Completed</option> 
+                                        <option value="5">Upload Pending</option>
+                                        <option value="6">Upload Cancelled</option>
+                                        <option value="7">Error</option>
+                                    </select>
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Date Created</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+
+                                <h4 class="sub-heading-custom">Data Transfer Cfg</h4>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Remote Server Index</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Remote Server Host</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Remote Server Port</label>
+                                    <input type="number" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Remot Server Base Uri</label>
+                                    <input type="string" class="form-control input-custom">
+                                </div>
+                                <div class="form-group input-group-custom">
+                                    <label class="form-label label-custom">Protocol</label>
+                                    <select id="protocol" name="protocol" [(ngModel)]="protocol"
+                                        class="form-control input-custom dropdown-input">
+                                        <option value="1">Other</option>
+                                        <option value="2">TFTP</option>
+                                    </select>
+                                </div>
+                                <div class="form-group form-check checkbox-group-custom">
+                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
+                                        name="supply">
+                                    <label class="form-check-label checkbox-label-custom" for="supply">Throttle
+                                        Local Store</label>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                <app-alert-modal *ngIf="modalConfig.show" [message]="modalConfig.message"
+                    [isError]="modalConfig.isError" [showCancelButton]="modalConfig.showCancelButton"
+                    (confirm)="onModalClose()" (cancel)="onModalClose()">
+                </app-alert-modal>

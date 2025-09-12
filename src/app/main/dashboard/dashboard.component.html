@@ -1,0 +1,54 @@
+<div class="dashboard-container-clean">
+  <div class="dashboard-header-clean">
+    <h6 class="dashboard-title-clean">Dashboard</h6>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-message-clean">
+    Loading data...
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message-clean">
+    {{ errorMessage }}
+  </div>
+
+  <div class="charts-2-3-container">
+    <div *ngIf="!isLoading && !errorMessage" class="main-boxes-grid">
+
+      <div class="styled-box-device">
+        <div class="box-title-border">Devices</div>
+        <div class="box-content-wrapper">
+          <div class="chart-content">
+            <div class="chart-area">
+              <canvas id="deviceStatusPieChart"></canvas>
+            </div>
+            <div class="chart-legend-inline">
+              <div class="legend-group">
+                <span class="legend-dot green"></span> Connected: {{ connectedDevices }}
+              </div>
+              <div class="legend-group">
+                <span class="legend-dot red"></span> Disconnected: {{ disconnectedDevices }}
+              </div>
+            </div>
+            <div class="chart-total-device">
+              <span class="total-text">Total Devices: {{ totalDevices }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="styled-box-gateway">
+        <div class="box-title-border">Gateways</div>
+        <div class="box-content-wrapper">
+          <div class="chart-content">
+            <div class="chart-area">
+              <canvas id="gatewayDevicesBarChart" width="500px" height="200px"></canvas>
+            </div>
+          </div>
+          <div class="chart-total-gateway">
+            <span class="total-text">Total Gateways: {{ totalGateways }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
