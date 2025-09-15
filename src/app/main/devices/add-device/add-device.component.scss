@@ -626,3 +626,179 @@ $card-border-color: #F0F0F0;
     border-bottom-right-radius: 0.5rem;
     margin-bottom: 1rem;
 }
+
+
+
+// Main container for the form
+.settings-form {
+    padding-top: 1rem;
+    padding-left: 1rem;
+}
+
+// Sub-heading style
+.settings-sub-heading {
+    font-size: 1rem;
+    font-weight: bold;
+    color: $dark-blue-text;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    // padding-left: -10px;
+    &:first-of-type {
+        margin-top: 0;
+    }
+}
+
+// Two-column layout container
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem; // Space between columns
+    margin-bottom: 1rem; // Space between rows
+}
+
+// Individual form group for label and input
+.form-group-custom {
+    display: flex;
+    align-items: center;
+    flex: 1 1 45%; // Flex-basis for two items per row, with some space
+    gap: 15px;
+}
+
+// Right-aligned labels with a fixed width
+.form-label-right {
+    font-size: 1rem;
+    color: #495057;
+    font-weight: 500;
+    text-align: right;
+    width: 10rem; // Fixed width for labels
+    flex-shrink: 0; // Prevents labels from shrinking
+}
+
+// Small width for input fields
+.form-input-small {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid $input-border-color;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    color: #333;
+    height: 38px;
+    width: 100%; // Takes up remaining space in the form group
+    &:focus {
+        border-color: $input-focus-border;
+        box-shadow: 0 0 0 0.1rem $input-focus-shadow;
+        outline: none;
+    }
+}
+
+.form-input-single {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid $input-border-color;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    color: #333;
+    height: 38px;
+    width: 28%; // Takes up remaining space in the form group
+    &:focus {
+        border-color: $input-focus-border;
+        box-shadow: 0 0 0 0.1rem $input-focus-shadow;
+        outline: none;
+    }
+}
+
+.form-dropdown-single {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid $input-border-color;
+    border-radius: 0.25rem;
+    font-size: 0.95rem;
+    color: #333;
+    height: 38px;
+    width: 30% !important; // Takes up remaining space in the form group
+    &:focus {
+        border-color: $input-focus-border;
+        box-shadow: 0 0 0 0.1rem $input-focus-shadow;
+        outline: none;
+    }
+}
+
+// Dropdown specific width adjustment
+.form-dropdown {
+    width: 100%; // Ensures dropdowns also fit
+    height: 45px;
+}
+
+// Specific styling for the checkbox group to align it with other fields
+.form-check-group {
+    display: flex;
+    align-items: center;
+    flex: 1 1 45%;
+    padding-left: 15px;
+    padding-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+// Custom checkbox styling
+.form-checkbox {
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1px solid $input-border-color;
+    border-radius: 0.25rem;
+    margin-top: 0.2rem;
+    &:checked {
+        background-color: $primary-blue;
+        border-color: $primary-blue;
+    }
+    &:focus {
+        box-shadow: 0 0 0 0.25rem rgba($primary-blue, 0.25);
+    }
+}
+
+.form-checkbox-label {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    color: #495057;
+    font-weight: 400;
+}
+
+/* Collapsible sections - New Class Names */
+.collapsible-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    &:hover {
+        background-color: #e2e6ea;
+    }
+    &:last-of-type {
+        border-bottom: none;
+    }
+}
+
+.section-title {
+    color: $dark-blue-text;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.expand-icon-custom {
+    transition: transform 0.3s ease-in-out;
+    color: $gray-text;
+}
+
+.expand-icon-custom.expanded {
+    transform: rotate(180deg);
+}
+
+.section-content-container {
+    padding: 1.5rem 1.5rem 0.5rem;
+    background-color: #fdfdfd;
+    border-left: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    margin-bottom: 1rem;
+}

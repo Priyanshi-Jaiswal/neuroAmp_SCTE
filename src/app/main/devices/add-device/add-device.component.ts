@@ -101,6 +101,17 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   fileType: string = '1';
   fileStatus: string = '1';
   protocol: string = '1';
+  rfSpectrumCapture: string = '0';
+  rfLevelControlType: string = '1'; 
+  agcType: string = '1';
+  usDsType: string = '1';
+  location: string = '1';
+  universalPluginDescr: string = 'Not Populated';
+  rfLevelControl: string = '1';
+  dsAgcPilotLossProtection: string = '1';
+  adminStatusType: string = '1';
+  state: string = '1';
+  attenuation: number = 0;
 
   // Replaced message and isError with a single config object
   modalConfig = {
@@ -175,6 +186,9 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     // If switching to LoRaWAN, ensure the first horizontal tab is active
     if (tabName === 'LoRaWAN') {
       this.setActiveLoRaWANTab('Activation');
+    }
+    else {
+      this.setActiveSCTETab('System');
     }
   }
 

@@ -571,671 +571,1381 @@
                 <div *ngIf="activeSettingTab === 'System'" class="general-settings-card">
                     <div class="scte-list-container">
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('SystemCapabilities')">
-                            <span class="scte-item-heading">System Capabilities</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'SystemCapabilities'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('systemCapabilities')">
+                            <span class="section-title">System Capabilities</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'systemCapabilities' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'SystemCapabilities'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Amplifier Type</label>
-                                    <select id="amplifierType" name="amplifierType" [(ngModel)]="amplifierType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Unknown</option>
-                                        <option value="3">Multiport</option>
-                                        <option value="4">Line Extender</option>
-                                        <option value="5">Booster</option>
-                                        <option value="6">Compact</option>
-                                    </select>
+                        <div *ngIf="expandedSCTESystemRow === 'systemCapabilities'" class="section-content-container">
+                            <form class="settings-form">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Amplifier Type</label>
+                                        <select id="amplifierType" name="amplifierType" [(ngModel)]="amplifierType"
+                                            class="form-dropdown-single form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Multiport</option>
+                                            <option value="4">Line Extender</option>
+                                            <option value="5">Booster</option>
+                                            <option value="6">Compact</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Power
-                                        Supply Redundancy</label>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="supply-redundancy"
+                                            name="supply">
+                                        <label class="form-checkbox-label" for="supply-redundancy">Supports Power Supply
+                                            Redundancy</label>
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Power Supply Redundancy Mode</label>
-                                    <select id="redundancyMode" name="redundancyMode" [(ngModel)]="redundancyMode"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Unknown</option>
-                                        <option value="3">Load Sharing</option>
-                                        <option value="4">Switched Redundant</option>
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Power Supply Redundancy Mode</label>
+                                        <select id="redundancyMode" name="redundancyMode" [(ngModel)]="redundancyMode"
+                                            class="form-dropdown-single form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Load Sharing</option>
+                                            <option value="4">Switched Redundant</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Power
-                                        Saving Mode</label>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="power-saving"
+                                            name="power-saving">
+                                        <label class="form-checkbox-label" for="power-saving">Supports Power Saving
+                                            Mode</label>
+                                    </div>
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="rf-config-file"
+                                            name="rf-config-file">
+                                        <label class="form-checkbox-label" for="rf-config-file">Supports Rf Config
+                                            File</label>
+                                    </div>
                                 </div>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Rf
-                                        Config File</label>
-                                </div>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Debug
-                                        File</label>
-                                </div>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Supports Rf
-                                        Spectrum Capture</label>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="debug-file" name="debug-file">
+                                        <label class="form-checkbox-label" for="debug-file">Supports Debug File</label>
+                                    </div>
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="rf-spectrum-capture"
+                                            name="rf-spectrum-capture">
+                                        <label class="form-checkbox-label" for="rf-spectrum-capture">Supports Rf
+                                            Spectrum Capture</label>
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('SystemStatus')">
-                            <span class="scte-item-heading">System Status</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'SystemStatus'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('systemStatus')">
+                            <span class="section-title">System Status</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'systemStatus' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'SystemStatus'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <h4 class="sub-heading-custom">System Status</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Unique ID</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Current Date Time</label>
-                                    <input type="string" class="form-control input-custom" [value]="currentTime"
-                                        readonly>
-                                </div>
-                                <!-- <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Up Time</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div> -->
-
-                                <h4 class="sub-heading-custom">Identification</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Model Number</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Serial Number</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Device Alias</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Device Description</label>
-                                    <textarea type="string" class="form-control input-custom"></textarea>
+                        <div *ngIf="expandedSCTESystemRow === 'systemStatus'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">System Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Unique ID</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Current Date Time</label>
+                                        <input type="string" class="form-input-small" [value]="currentTime" readonly>
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Vendor</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Name</label>
-                                    <input type="string" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Identification</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Model Number</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Serial Number</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">OUI</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-
-                                <h4 class="sub-heading-custom">Version Summary</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Current Sw Version</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Boot Rom Version</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Hw Version</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Device Alias</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Device Description</label>
+                                        <textarea type="string" class="form-input-small form-textarea"></textarea>
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Enclosure</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Is Open</label>
-                                    <input type="string" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Vendor</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Name</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">OUI</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Sensor</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Id</label>
-                                    <input type="string" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Version Summary</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Current Sw Version</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Boot Rom Version</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Name</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Sensor Type</label>
-                                    <select id="sensorType" name="sensorType" [(ngModel)]="sensorType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Unknown</option>
-                                        <option value="3">Volts AC</option>
-                                        <option value="4">Volts DC</option>
-                                        <option value="5">Amperes</option>
-                                        <option value="6">Watts</option>
-                                        <option value="7">Hertz</option>
-                                        <option value="8">Celsius</option>
-                                        <option value="9">Percent RH</option>
-                                        <option value="10">RPM</option>
-                                        <option value="11">CMM</option>
-                                        <option value="12">Truth Value</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Scale</label>
-                                    <select id="scale" name="scale" [(ngModel)]="scale"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Yocto</option>
-                                        <option value="2">Zepto</option>
-                                        <option value="3">Atto</option>
-                                        <option value="4">Femto</option>
-                                        <option value="5">Pico</option>
-                                        <option value="6">Nano</option>
-                                        <option value="7">Micro</option>
-                                        <option value="8">Milli</option>
-                                        <option value="9">Units</option>
-                                        <option value="10">Kilo</option>
-                                        <option value="11">Mega</option>
-                                        <option value="12">Giga</option>
-                                        <option value="13">Tera</option>
-                                        <option value="14">Exa</option>
-                                        <option value="15">Peta</option>
-                                        <option value="16">Zeta</option>
-                                        <option value="17">Yotta</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Precision</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Value</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Oper Status</label>
-                                    <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Unknown</option>
-                                        <option value="3">Up</option>
-                                        <option value="4">Down</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Units Display</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Value Time Stamp</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Value Update Rate</label>
-                                    <input type="number" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Hw Version</label>
+                                        <input type="string" class="form-input-single">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Power Supply</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Id</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Description</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Oper Status</label>
-                                    <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Unknown</option>
-                                        <option value="3">Up</option>
-                                        <option value="4">Down</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Input Voltage</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Input Current</label>
-                                    <input type="string" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Enclosure</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Is Open</label>
+                                        <input type="string" class="form-input-single">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Output Rail</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Id</label>
-                                    <input type="number" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Sensor</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Id</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Name</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Description</label>
-                                    <input type="number" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Sensor Type</label>
+                                        <select id="sensorType" name="sensorType" [(ngModel)]="sensorType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Volts AC</option>
+                                            <option value="4">Volts DC</option>
+                                            <option value="5">Amperes</option>
+                                            <option value="6">Watts</option>
+                                            <option value="7">Hertz</option>
+                                            <option value="8">Celsius</option>
+                                            <option value="9">Percent RH</option>
+                                            <option value="10">RPM</option>
+                                            <option value="11">CMM</option>
+                                            <option value="12">Truth Value</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Scale</label>
+                                        <select id="scale" name="scale" [(ngModel)]="scale"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Yocto</option>
+                                            <option value="2">Zepto</option>
+                                            <option value="3">Atto</option>
+                                            <option value="4">Femto</option>
+                                            <option value="5">Pico</option>
+                                            <option value="6">Nano</option>
+                                            <option value="7">Micro</option>
+                                            <option value="8">Milli</option>
+                                            <option value="9">Units</option>
+                                            <option value="10">Kilo</option>
+                                            <option value="11">Mega</option>
+                                            <option value="12">Giga</option>
+                                            <option value="13">Tera</option>
+                                            <option value="14">Exa</option>
+                                            <option value="15">Peta</option>
+                                            <option value="16">Zeta</option>
+                                            <option value="17">Yotta</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Oper Status</label>
-                                    <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Unknown</option>
-                                        <option value="3">Up</option>
-                                        <option value="4">Down</option>
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Precision</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Value</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Voltage</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Oper Status</label>
+                                        <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Up</option>
+                                            <option value="4">Down</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Units Display</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Current</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Value Time Stamp</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Value Update Rate</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Power Supply</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Id</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Description</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Oper Status</label>
+                                        <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Up</option>
+                                            <option value="4">Down</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Input Voltage</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Input Current</label>
+                                        <input type="string" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Output Rail</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Id</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Description</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Oper Status</label>
+                                        <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Up</option>
+                                            <option value="4">Down</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Voltage</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Current</label>
+                                        <input type="string" class="form-input-single">
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('SystemCfg')">
-                            <span class="scte-item-heading">System Cfg</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'SystemCfg'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('systemCfg')">
+                            <span class="section-title">System Cfg</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'systemCfg' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'SystemCfg'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <h4 class="sub-heading-custom">System Cfg</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Hostname</label>
-                                    <input type="string" class="form-control input-custom">
+                        <div *ngIf="expandedSCTESystemRow === 'systemCfg'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">System Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Hostname</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Asset ID</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">AssetId</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Description</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Cascade Position</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Description</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Cascade Position</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Location</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Description</label>
-                                    <input type="string" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Location</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Description</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Latitude</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Latitude</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Longitude</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Longitude</label>
+                                        <input type="string" class="form-input-single">
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('ResetStatus')">
-                            <span class="scte-item-heading">Reset Status</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'ResetStatus'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('resetStatus')">
+                            <span class="section-title">Reset Status</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'resetStatus' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'ResetStatus'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <h4 class="sub-heading-custom">Reset Capabilities</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Reset Types Supported</label>
-                                    <select id="type" name="type" [(ngModel)]="type"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Soft Reset</option>
-                                        <option value="2">Hard Reset</option>
-                                        <option value="3">NV Reset</option>
-                                        <option value="4">Factory Reset</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Reset History Size</label>
-                                    <input type="number" class="form-control input-custom">
+                        <div *ngIf="expandedSCTESystemRow === 'resetStatus'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">Reset Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Reset Types Supported</label>
+                                        <select id="type" name="type" [(ngModel)]="type"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Soft Reset</option>
+                                            <option value="2">Hard Reset</option>
+                                            <option value="3">NV Reset</option>
+                                            <option value="4">Factory Reset</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Reset History Size</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Reset History Status</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Index</label>
-                                    <input type="number" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Reset History Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Reset Timestamp</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Reset Timestamp</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Type</label>
+                                        <select id="type" name="type" [(ngModel)]="type"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Soft Reset</option>
+                                            <option value="2">Hard Reset</option>
+                                            <option value="3">NV Reset</option>
+                                            <option value="4">Factory Reset</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Reason</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Type</label>
-                                    <select id="type" name="type" [(ngModel)]="type"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Soft Reset</option>
-                                        <option value="2">Hard Reset</option>
-                                        <option value="3">NV Reset</option>
-                                        <option value="4">Factory Reset</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Reason</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Event Id Ref</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Recovery Time</label>
-                                    <input type="number" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Event Id Ref</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Recovery Time</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('EventStatus')">
-                            <span class="scte-item-heading">Event Status</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'EventStatus'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('eventStatus')">
+                            <span class="section-title">Event Status</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'eventStatus' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'EventStatus'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <h4 class="sub-heading-custom">Event Capabilities</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Local Event Log Max Size</label>
-                                    <input type="number" class="form-control input-custom">
+
+                        <div *ngIf="expandedSCTESystemRow === 'eventStatus'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">Event Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Local Event Log Max Size</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Event Status</h4>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Throttle
-                                        Threshold Exceeded</label>
+                                <h4 class="settings-sub-heading">Event Status</h4>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="supply" name="supply">
+                                        <label class="form-checkbox-label" for="supply">Throttle Threshold
+                                            Exceeded</label>
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Event</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Index</label>
-                                    <input type="number" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Event</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">First Time</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">First Time</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Last Time</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Level</label>
+                                        <select id="evPriorityType" name="evPriorityType" [(ngModel)]="evPriorityType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Emergency</option>
+                                            <option value="2">Alert</option>
+                                            <option value="3">Critical</option>
+                                            <option value="4">Error</option>
+                                            <option value="5">Warning</option>
+                                            <option value="6">Notice</option>
+                                            <option value="7">Informational</option>
+                                            <option value="8">Debug</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Last Time</label>
-                                    <input type="number" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Id</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Text</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Level</label>
-                                    <select id="evPriorityType" name="evPriorityType" [(ngModel)]="evPriorityType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Emergency</option>
-                                        <option value="2">Alert</option>
-                                        <option value="3">Critical</option>
-                                        <option value="4">Error</option>
-                                        <option value="5">Warning</option>
-                                        <option value="6">Notice</option>
-                                        <option value="7">Informational</option>
-                                        <option value="8">Debug</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Id</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Text</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Longitude</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-
-                                <h4 class="sub-heading-custom">Syslog</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Level</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Timestamp</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Host Name</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">NE Type</label>
-                                    <input type="string" class="form-control input-custom" id="neType" name="neType"
-                                        [(ngModel)]="neType">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Vendor</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Event ID</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Text</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Vendor Specific Text</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Longitude</label>
+                                        <input type="string" class="form-input-single">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Event Syslog Status</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Index</label>
-                                    <input type="number" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Syslog</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Level</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Timestamp</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Server Address</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Host Name</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">NE Type</label>
+                                        <input type="string" class="form-input-small" id="neType" name="neType"
+                                            [(ngModel)]="neType">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Level</label>
-                                    <select id="ipAddressOriginType" name="ipAddressOriginType"
-                                        [(ngModel)]="ipAddressOriginType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Static</option>
-                                        <option value="3">DHCP</option>
-                                        <option value="4">Link Layer</option>
-                                        <option value="5">Random</option>
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Vendor</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Event ID</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Text</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Vendor Specific Text</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Event Syslog Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Server Address</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Level</label>
+                                        <select id="ipAddressOriginType" name="ipAddressOriginType"
+                                            [(ngModel)]="ipAddressOriginType"
+                                            class="form-dropdown-single form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Static</option>
+                                            <option value="3">DHCP</option>
+                                            <option value="4">Link Layer</option>
+                                            <option value="5">Random</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('eventCfg')">
-                            <span class="scte-item-heading">Event Cfgs</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'eventCfg'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('eventCfg')">
+                            <span class="section-title">Event Cfgs</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'eventCfg' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'eventCfg'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <h4 class="sub-heading-custom">Event Throttle Cfg</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Admin State</label>
-                                    <select id="eventThrottleAdminStateType" name="eventThrottleAdminStateType"
-                                        [(ngModel)]="eventThrottleAdminStateType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Unconstrained</option>
-                                        <option value="2">Maintain Below Threshold</option>
-                                        <option value="3">Stop At Threshold</option>
-                                        <option value="4">Inhibited</option>
-                                    </select>
+                        <div *ngIf="expandedSCTESystemRow === 'eventCfg'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">Event Throttle Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Admin State</label>
+                                        <select id="eventThrottleAdminStateType" name="eventThrottleAdminStateType"
+                                            [(ngModel)]="eventThrottleAdminStateType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Unconstrained</option>
+                                            <option value="2">Maintain Below Threshold</option>
+                                            <option value="3">Stop At Threshold</option>
+                                            <option value="4">Inhibited</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Threshold</label>
+                                        <input type="number" class="form-input-small" id="threshold" name="threshold"
+                                            [(ngModel)]="threshold">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Threshold</label>
-                                    <input type="number" class="form-control input-custom" id="threshold"
-                                        name="threshold" [(ngModel)]="threshold">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Interval</label>
-                                    <input type="number" class="form-control input-custom" id="interval" name="interval"
-                                        [(ngModel)]="interval">
-                                </div>
-
-                                <h4 class="sub-heading-custom">Event Reporting Cfg</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Priority</label>
-                                    <select id="evPriorityType" name="evPriorityType" [(ngModel)]="evPriorityType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Emergency</option>
-                                        <option value="2">Alert</option>
-                                        <option value="3">Critical</option>
-                                        <option value="4">Error</option>
-                                        <option value="5">Warning</option>
-                                        <option value="6">Notice</option>
-                                        <option value="7">Informational</option>
-                                        <option value="8">Debug</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Reporting</label>
-                                    <select id="evReportingType" name="evReportingType" [(ngModel)]="evReportingType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Local</option>
-                                        <option value="2">Traps</option>
-                                        <option value="3">Syslog</option>
-                                        <option value="4">Local Volatile</option>
-                                        <option value="5">STD Interface</option>
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Interval</label>
+                                        <input type="number" class="form-input-single" id="interval" name="interval"
+                                            [(ngModel)]="interval">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Syslog Server Cfg</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Index</label>
-                                    <input type="number" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">Event Reporting Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Priority</label>
+                                        <select id="evPriorityType" name="evPriorityType" [(ngModel)]="evPriorityType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Emergency</option>
+                                            <option value="2">Alert</option>
+                                            <option value="3">Critical</option>
+                                            <option value="4">Error</option>
+                                            <option value="5">Warning</option>
+                                            <option value="6">Notice</option>
+                                            <option value="7">Informational</option>
+                                            <option value="8">Debug</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Reporting</label>
+                                        <select id="evReportingType" name="evReportingType"
+                                            [(ngModel)]="evReportingType" class="form-input-small form-dropdown">
+                                            <option value="1">Local</option>
+                                            <option value="2">Traps</option>
+                                            <option value="3">Syslog</option>
+                                            <option value="4">Local Volatile</option>
+                                            <option value="5">STD Interface</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Server Address</label>
-                                    <input type="string" class="form-control input-custom">
+
+                                <h4 class="settings-sub-heading">Syslog Server Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Server Address</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Admin State</label>
-                                    <select id="eventThrottleAdminStateType" name="eventThrottleAdminStateType"
-                                        [(ngModel)]="eventThrottleAdminStateType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Unconstrained</option>
-                                        <option value="2">Maintain Below Threshold</option>
-                                        <option value="3">Stop At Threshold</option>
-                                        <option value="4">Inhibited</option>
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Admin State</label>
+                                        <select id="eventThrottleAdminStateType" name="eventThrottleAdminStateType"
+                                            [(ngModel)]="eventThrottleAdminStateType"
+                                            class="form-dropdown-single form-dropdown">
+                                            <option value="1">Unconstrained</option>
+                                            <option value="2">Maintain Below Threshold</option>
+                                            <option value="3">Stop At Threshold</option>
+                                            <option value="4">Inhibited</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </form>
                         </div>
 
-                        <div class="scte-list-item" (click)="toggleSCTESystemRow('fileManagement')">
-                            <span class="scte-item-heading">File Management</span>
-                            <span class="expand-icon" [class.expanded]="expandedSCTESystemRow === 'fileManagement'">
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
+
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('fileManagement')">
+                            <span class="section-title">File Management</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'fileManagement' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
                         </div>
-                        <div *ngIf="expandedSCTESystemRow === 'fileManagement'" class="scte-item-form-container">
-                            <form class="nav-form">
-                                <h4 class="sub-heading-custom">File Capabilities</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Num Debug Files Supported</label>
-                                    <input type="number" class="form-control input-custom">
+                        <div *ngIf="expandedSCTESystemRow === 'fileManagement'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">File Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Debug Files Supported</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Cfg Files Supported</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Num RF Cfg Files Supported</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Num RF Spectrum Capture Files Supported</label>
-                                    <input type="number" class="form-control input-custom">
-                                </div>
-
-                                <h4 class="sub-heading-custom">File Status</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">File Name</label>
-                                    <input type="string" class="form-control input-custom">
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">File Type</label>
-                                    <select id="fileType" name="fileType" [(ngModel)]="fileType"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Debug</option>
-                                        <option value="3">RF Cfg</option>
-                                        <option value="4">RF Spectrum Capture</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">File Status</label>
-                                    <select id="fileStatus" name="fileStatus" [(ngModel)]="fileStatus"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">Available For Upload</option>
-                                        <option value="3">Upload In Progress</option>
-                                        <option value="4">Upload Completed</option> 
-                                        <option value="5">Upload Pending</option>
-                                        <option value="6">Upload Cancelled</option>
-                                        <option value="7">Error</option>
-                                    </select>
-                                </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Date Created</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Spectrum Capture Files Supported</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
                                 </div>
 
-                                <h4 class="sub-heading-custom">Data Transfer Cfg</h4>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Remote Server Index</label>
-                                    <input type="number" class="form-control input-custom">
+                                <h4 class="settings-sub-heading">File Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">File Name</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">File Type</label>
+                                        <select id="fileType" name="fileType" [(ngModel)]="fileType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Debug</option>
+                                            <option value="3">RF Cfg</option>
+                                            <option value="4">RF Spectrum Capture</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Remote Server Host</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">File Status</label>
+                                        <select id="fileStatus" name="fileStatus" [(ngModel)]="fileStatus"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Available For Upload</option>
+                                            <option value="3">Upload In Progress</option>
+                                            <option value="4">Upload Completed</option>
+                                            <option value="5">Upload Pending</option>
+                                            <option value="6">Upload Cancelled</option>
+                                            <option value="7">Error</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Date Created</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Remote Server Port</label>
-                                    <input type="number" class="form-control input-custom">
+
+                                <h4 class="settings-sub-heading">Data Transfer Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Remote Server Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Remote Server Host</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Remot Server Base Uri</label>
-                                    <input type="string" class="form-control input-custom">
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Remote Server Port</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Remote Server Base Url</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
                                 </div>
-                                <div class="form-group input-group-custom">
-                                    <label class="form-label label-custom">Protocol</label>
-                                    <select id="protocol" name="protocol" [(ngModel)]="protocol"
-                                        class="form-control input-custom dropdown-input">
-                                        <option value="1">Other</option>
-                                        <option value="2">TFTP</option>
-                                    </select>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Protocol</label>
+                                        <select id="protocol" name="protocol" [(ngModel)]="protocol"
+                                            class="form-dropdown-single form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">TFTP</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group form-check checkbox-group-custom">
-                                    <input type="checkbox" class="form-check-input checkbox-input-custom" id="supply"
-                                        name="supply">
-                                    <label class="form-check-label checkbox-label-custom" for="supply">Local Store</label>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="supply" name="supply">
+                                        <label class="form-checkbox-label" for="supply">Local Store</label>
+                                    </div>
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
+
+                <div *ngIf="activeSettingTab === 'RF'" class="general-settings-card">
+                    <div class="scte-list-container">
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('rfCapabilities')">
+                            <span class="section-title">RF Capabilities</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'rfCapabilities' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'rfCapabilities'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">RF Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Num RF Ports</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class=" form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="universal-plugin"
+                                            name="universal-plugin">
+                                        <label class="form-checkbox-label" for="universal-plugin">Supports Universal
+                                            Plugin</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Num Diplex Filters</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Supports RF Spectrum Capture</label>
+                                        <select id="rfSpectrumCapture" name="rfSpectrumCapture"
+                                            [(ngModel)]="rfSpectrumCapture" class="form-input-small form-dropdown">
+                                            <option value="0">Not Supported</option>
+                                            <option value="1">Port1 Upstream</option>
+                                            <option value="2">Port1 Downstream</option>
+                                            <option value="3">Port2 Upstream</option>
+                                            <option value="4">Port2 Downstream</option>
+                                            <option value="5">Port3 Upstream</option>
+                                            <option value="6">Port3 Downstream</option>
+                                            <option value="7">Port4 Upstream</option>
+                                            <option value="8">Port4 Downstream</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">RF Port Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Diplex Filter Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Diplex Filter Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Diplex Filter Us Upper Band Edge</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Diplex Filter Us Lower Band Edge</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Us Logical Port Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Min Us Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Max Us Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Operational Gain</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Num Us Stages</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="us-rf-test-point"
+                                            name="us-rf-test-point">
+                                        <label class="form-checkbox-label" for="us-rf-test-point">RF Test Point
+                                            Support</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Test Point Num Points</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="us-ingress-switch"
+                                            name="us-ingress-switch">
+                                        <label class="form-checkbox-label" for="us-ingress-switch">Supports Ingress
+                                            Switch</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Ingress Switch Attenuation Min Value</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Ingress Switch Attenuation Max Value</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Ingress Switch Attenuation Step Size</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Rf Level Control Type</label>
+                                        <select id="rfLevelControlType" name="rfLevelControlType"
+                                            [(ngModel)]="rfLevelControlType" class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Quasi AGC</option>
+                                            <option value="4">Thermal Level Control</option>
+                                            <option value="5">Thermal Level Control Select</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Thermal Level Control Select Range Min
+                                            Value</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Thermal Level Control Select Range Max
+                                            Value</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Thermal Level Control Select Range Step
+                                            Size</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Ds Logical Port Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Min Ds Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Max Ds Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Operational Gain</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Num Ds Stages</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="ds-rf-test-point"
+                                            name="ds-rf-test-point">
+                                        <label class="form-checkbox-label" for="ds-rf-test-point">RF Test Point
+                                            Support</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Test Point Num Points</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">AGC Type</label>
+                                        <select id="agcType" name="agcType" [(ngModel)]="agcType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">MF AGC</option>
+                                            <option value="4">Agile AGC</option>
+                                            <option value="5">AGC Pilot Loss Protection</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">AGC Num Agile Pilots</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">AGC Pilot Loss Protection Type</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Us Ds Stage Capabilities</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Stage Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Type</label>
+                                        <select id="usDsType" name="usDsType" [(ngModel)]="usDsType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Attenuation</option>
+                                            <option value="4">Equalization</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Location</label>
+                                        <select id="location" name="location" [(ngModel)]="location"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Input Stage</option>
+                                            <option value="4">Inter Stage</option>
+                                            <option value="5">Outer Stage</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Min Attenuation</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Max Attenuation</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Attenuation Step Size</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Min Equalization</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Max Equalization</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Equalization Step Size</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('rfStatus')">
+                            <span class="section-title">RF Status</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'rfStatus' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'rfStatus'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">RF Status Grp</h4>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="ds-rf-test-point"
+                                            name="ds-rf-test-point">
+                                        <label class="form-checkbox-label" for="ds-rf-test-point">Universal Plugin
+                                            Present</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Universal Plugin Descr</label>
+                                        <input type="string" class="form-input-single" id="universalPluginDescr"
+                                            name="universalPluginDescr" [(ngModel)]="universalPluginDescr">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Us Logical Port Status</h4>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="ds-rf-test-point"
+                                            name="ds-rf-test-point">
+                                        <label class="form-checkbox-label" for="ds-rf-test-point">RF Level Control
+                                            Enabled</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Level Control</label>
+                                        <select id="rfLevelControl" name="rfLevelControl" [(ngModel)]="rfLevelControl"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Quasi AGC</option>
+                                            <option value="4">Thermal Level Control</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Level Control To Upper Limit</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Level Control To Lower Limit</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Ds Logical Port Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Reported Output Power</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="ds-rf-test-point"
+                                            name="ds-rf-test-point">
+                                        <label class="form-checkbox-label" for="ds-rf-test-point">Ds AGC Enabled</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Ds AGC Pilot Loss Protection</label>
+                                        <select id="dsAgcPilotLossProtection" name="dsAgcPilotLossProtection"
+                                            [(ngModel)]="dsAgcPilotLossProtection"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Alternate Pilot Freq</option>
+                                            <option value="4">Thermal</option>
+                                            <option value="5">LockSettings</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Ds AGC To Upper Limit</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Ds AGC To Lower Limit</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Logical Port Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Vendor Desc</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Oper Status</label>
+                                        <select id="operStatusType" name="operStatusType" [(ngModel)]="operStatusType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Unknown</option>
+                                            <option value="3">Up</option>
+                                            <option value="4">Down</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Test Point Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Point Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Point Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Point Level</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('rfCfgGroup')">
+                            <span class="section-title">RF CFG Group</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'rfCfgGroup' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'rfCfgGroup'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">RF Port Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Admin Status</label>
+                                        <select id="adminStatusType" name="adminStatusType"
+                                            [(ngModel)]="adminStatusType" class="form-input-small form-dropdown">
+                                            <option value="1">Up</option>
+                                            <option value="2">Down</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Bi Dir Logical Port Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Active Diplex Filter Index</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Logical Port Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Admin Status</label>
+                                        <select id="adminStatusType" name="adminStatusType"
+                                            [(ngModel)]="adminStatusType" class="form-dropdown-single form-dropdown">
+                                            <option value="1">Up</option>
+                                            <option value="2">Down</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="ds-rf-test-point"
+                                            name="ds-rf-test-point">
+                                        <label class="form-checkbox-label" for="ds-rf-test-point">RF Mute</label>
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Us Logical Port Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Thermal Level Control Select Range
+                                            Setting</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Us Ingress Switch Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">State</label>
+                                        <select id="state" name="state" [(ngModel)]="state"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">On</option>
+                                            <option value="2">Off</option>
+                                            <option value="3">Attenuated</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Attenuation</label>
+                                        <input type="number" class="form-input-single" id="attenuation"
+                                            name="attenuation" [(ngModel)]="attenuation">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Ds Logical Port Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-check-group">
+                                        <input type="checkbox" class="form-checkbox" id="ds-rf-test-point"
+                                            name="ds-rf-test-point">
+                                        <label class="form-checkbox-label" for="ds-rf-test-point">Ds AGC Enable</label>
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Ds Agile AGC Pilot Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Pilot Num</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Pilot Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Us Ds Cfg</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Stage Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Attenuation</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Equalization</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="activeSettingTab === 'Networking'" class="general-settings-card">
+                    <div class="scte-list-container">
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('networkingStatusGrp')">
+                            <span class="section-title">Networking Status Grp</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'networkingStatusGrp' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'networkingStatusGrp'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">IP Host Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">IP</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Subnet Mask</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Default Gateway</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Management IP</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">Local Time Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Server IP</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">DHCP Server Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Server IP</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Relay Agent IP</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">DNS Server Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Server IP</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 <app-alert-modal *ngIf="modalConfig.show" [message]="modalConfig.message"
                     [isError]="modalConfig.isError" [showCancelButton]="modalConfig.showCancelButton"
