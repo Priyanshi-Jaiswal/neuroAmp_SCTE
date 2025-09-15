@@ -570,8 +570,6 @@
 
                 <div *ngIf="activeSettingTab === 'System'" class="general-settings-card">
                     <div class="scte-list-container">
-
-
                         <div class="collapsible-section" (click)="toggleSCTESystemRow('systemCapabilities')">
                             <span class="section-title">System Capabilities</span>
                             <mat-icon>{{ expandedSCTESystemRow === 'systemCapabilities' ? 'keyboard_arrow_up' :
@@ -623,7 +621,7 @@
                                     <div class="form-check-group">
                                         <input type="checkbox" class="form-checkbox" id="rf-config-file"
                                             name="rf-config-file">
-                                        <label class="form-checkbox-label" for="rf-config-file">Supports Rf Config
+                                        <label class="form-checkbox-label" for="rf-config-file">Supports RF Config
                                             File</label>
                                     </div>
                                 </div>
@@ -635,7 +633,7 @@
                                     <div class="form-check-group">
                                         <input type="checkbox" class="form-checkbox" id="rf-spectrum-capture"
                                             name="rf-spectrum-capture">
-                                        <label class="form-checkbox-label" for="rf-spectrum-capture">Supports Rf
+                                        <label class="form-checkbox-label" for="rf-spectrum-capture">Supports RF
                                             Spectrum Capture</label>
                                     </div>
                                 </div>
@@ -698,17 +696,17 @@
                                 <h4 class="settings-sub-heading">Version Summary</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Current Sw Version</label>
+                                        <label class="form-label-right">Current SW Version</label>
                                         <input type="string" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Boot Rom Version</label>
+                                        <label class="form-label-right">Boot ROM Version</label>
                                         <input type="string" class="form-input-small">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Hw Version</label>
+                                        <label class="form-label-right">HW Version</label>
                                         <input type="string" class="form-input-single">
                                     </div>
                                 </div>
@@ -724,7 +722,7 @@
                                 <h4 class="settings-sub-heading">Sensor</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Id</label>
+                                        <label class="form-label-right">ID</label>
                                         <input type="string" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
@@ -815,7 +813,7 @@
                                 <h4 class="settings-sub-heading">Power Supply</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Id</label>
+                                        <label class="form-label-right">ID</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
@@ -849,7 +847,7 @@
                                 <h4 class="settings-sub-heading">Output Rail</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Id</label>
+                                        <label class="form-label-right">ID</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
@@ -892,7 +890,7 @@
                                 <h4 class="settings-sub-heading">System Cfg</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Hostname</label>
+                                        <label class="form-label-right">Host Name</label>
                                         <input type="string" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
@@ -985,7 +983,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Event Id Ref</label>
+                                        <label class="form-label-right">Event ID Ref</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
@@ -1054,7 +1052,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Id</label>
+                                        <label class="form-label-right">ID</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
@@ -1230,8 +1228,6 @@
                                 </div>
                             </form>
                         </div>
-
-
 
                         <div class="collapsible-section" (click)="toggleSCTESystemRow('fileManagement')">
                             <span class="section-title">File Management</span>
@@ -1469,7 +1465,7 @@
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Rf Level Control Type</label>
+                                        <label class="form-label-right">RF Level Control Type</label>
                                         <select id="rfLevelControlType" name="rfLevelControlType"
                                             [(ngModel)]="rfLevelControlType" class="form-input-small form-dropdown">
                                             <option value="1">Other</option>
@@ -1754,7 +1750,7 @@
                         </div>
 
                         <div class="collapsible-section" (click)="toggleSCTESystemRow('rfCfgGroup')">
-                            <span class="section-title">RF CFG Group</span>
+                            <span class="section-title">RF Cfg Group</span>
                             <mat-icon>{{ expandedSCTESystemRow === 'rfCfgGroup' ? 'keyboard_arrow_up' :
                                 'keyboard_arrow_down' }}</mat-icon>
                         </div>
