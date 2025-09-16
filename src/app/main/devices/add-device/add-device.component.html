@@ -518,11 +518,61 @@
                                 </div>
                             </div>
 
-                            <div class="form-group input-group-custom" style="margin-left: 2rem;">
-                                <label for="payloadContent" class="form-label label-custom">Payload</label>
+                            <div class="form-group input-group-custom" style="margin-left: 2rem;" *ngIf="!isScte283">
+                                <label for="payloadContent" class="form-label label-custom">Payload:</label>
                                 <textarea class="form-control input-custom" id="payloadContent" name="payloadContent"
                                     [(ngModel)]="payloadContent" rows="5"></textarea>
                             </div>
+
+                            <div class="form-group input-group-custom"
+                                style="margin-left: 2rem; margin-bottom: -3.75rem; margin-top: -1.75rem"
+                                *ngIf="isScte283">
+                                <label for="payloadContent" class="form-label label-custom"
+                                    style="margin-top: -1.80rem; margin-right: 2rem;">Payload:</label>
+                                <div class="form-row">
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                            id="system" name="system">
+                                        <label class="form-check-label checkbox-label-custom"
+                                            for="system">System</label>
+                                    </div>
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                            id="powerSupply" name="powerSupply">
+                                        <label class="form-check-label checkbox-label-custom" for="powerSupply">Power
+                                            Supply</label>
+                                    </div>
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom" id="pnm"
+                                            name="pnm">
+                                        <label class="form-check-label checkbox-label-custom" for="pnm">PNM</label>
+                                    </div>
+                                </div>
+                                <!-- <textarea class="form-control input-custom" id="payloadContent" name="payloadContent"
+                                    [(ngModel)]="payloadContent" rows="5"></textarea> -->
+                            </div>
+
+                            <!-- <div class="form-group row mb-3" *ngIf="isScte283">
+                                <div class="form-row">
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                            id="system" name="system">
+                                        <label class="form-check-label checkbox-label-custom"
+                                            for="system">System</label>
+                                    </div>
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom"
+                                            id="powerSupply" name="powerSupply">
+                                        <label class="form-check-label checkbox-label-custom" for="powerSupply">Power
+                                            Supply</label>
+                                    </div>
+                                    <div class="form-check checkbox-group-custom">
+                                        <input type="checkbox" class="form-check-input checkbox-input-custom" id="pnm"
+                                            name="pnm">
+                                        <label class="form-check-label checkbox-label-custom" for="pnm">PNM</label>
+                                    </div>
+                                </div>
+                            </div> -->
 
                             <div class="form-group row mb-3">
                                 <div class="col-sm-10 offset-sm-2">
@@ -577,6 +627,7 @@
                         </div>
                         <div *ngIf="expandedSCTESystemRow === 'systemCapabilities'" class="section-content-container">
                             <form class="settings-form">
+                                <h4 class="settings-sub-heading">System Capabilities</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
                                         <label class="form-label-right">Amplifier Type</label>
@@ -718,7 +769,7 @@
                                         <input type="string" class="form-input-single">
                                     </div>
                                 </div>
-
+                                <!--
                                 <h4 class="settings-sub-heading">Sensor</h4>
                                 <div class="form-row">
                                     <div class="form-group-custom">
@@ -807,6 +858,117 @@
                                     <div class="form-group-custom">
                                         <label class="form-label-right">Value Update Rate</label>
                                         <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                            -->
+
+                                <h4 class="settings-sub-heading">
+                                    <span>Sensor</span>
+                                    <mat-icon class="add-icon-custom" [class.disabled]="!isFirstSensorValid()"
+                                        (click)="isFirstSensorValid() && addSensor()">add_box</mat-icon>
+                                </h4>
+
+                                <div *ngFor="let sensor of sensors; let i = index">
+                                    <div class="form-row">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">ID</label>
+                                            <input type="string" class="form-input-small" [(ngModel)]="sensor.id"
+                                                name="sensorId-{{i}}">
+                                        </div>
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Name</label>
+                                            <input type="string" class="form-input-small" [(ngModel)]="sensor.name"
+                                                name="sensorName-{{i}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Sensor Type</label>
+                                            <select id="sensorType-{{i}}" name="sensorType-{{i}}"
+                                                [(ngModel)]="sensor.sensorType" class="form-input-small form-dropdown">
+                                                <option value="1">Other</option>
+                                                <option value="2">Unknown</option>
+                                                <option value="3">Volts AC</option>
+                                                <option value="4">Volts DC</option>
+                                                <option value="5">Amperes</option>
+                                                <option value="6">Watts</option>
+                                                <option value="7">Hertz</option>
+                                                <option value="8">Celsius</option>
+                                                <option value="9">Percent RH</option>
+                                                <option value="10">RPM</option>
+                                                <option value="11">CMM</option>
+                                                <option value="12">Truth Value</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Scale</label>
+                                            <select id="scale-{{i}}" name="scale-{{i}}" [(ngModel)]="sensor.scale"
+                                                class="form-input-small form-dropdown">
+                                                <option value="1">Yocto</option>
+                                                <option value="2">Zepto</option>
+                                                <option value="3">Atto</option>
+                                                <option value="4">Femto</option>
+                                                <option value="5">Pico</option>
+                                                <option value="6">Nano</option>
+                                                <option value="7">Micro</option>
+                                                <option value="8">Milli</option>
+                                                <option value="9">Units</option>
+                                                <option value="10">Kilo</option>
+                                                <option value="11">Mega</option>
+                                                <option value="12">Giga</option>
+                                                <option value="13">Tera</option>
+                                                <option value="14">Exa</option>
+                                                <option value="15">Peta</option>
+                                                <option value="16">Zeta</option>
+                                                <option value="17">Yotta</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Precision</label>
+                                            <input type="number" class="form-input-small" [(ngModel)]="sensor.precision"
+                                                name="sensorPrecision-{{i}}">
+                                        </div>
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Value</label>
+                                            <input type="number" class="form-input-small" [(ngModel)]="sensor.value"
+                                                name="sensorValue-{{i}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Oper Status</label>
+                                            <select id="operStatusType-{{i}}" name="operStatusType-{{i}}"
+                                                [(ngModel)]="sensor.operStatusType"
+                                                class="form-input-small form-dropdown">
+                                                <option value="1">Other</option>
+                                                <option value="2">Unknown</option>
+                                                <option value="3">Up</option>
+                                                <option value="4">Down</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Units Display</label>
+                                            <input type="string" class="form-input-small"
+                                                [(ngModel)]="sensor.unitsDisplay" name="unitsDisplay-{{i}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Value Time Stamp</label>
+                                            <input type="string" class="form-input-small"
+                                                [(ngModel)]="sensor.valueTimeStamp" name="valueTimeStamp-{{i}}">
+                                        </div>
+                                        <div class="form-group-custom">
+                                            <label class="form-label-right">Value Update Rate</label>
+                                            <input type="number" class="form-input-small"
+                                                [(ngModel)]="sensor.valueUpdateRate" name="valueUpdateRate-{{i}}">
+                                        </div>
+                                    </div>
+                                    <div class="form-row remove-button-row">
+                                        <button (click)="removeSensor(i)" class="btn btn-danger btn-sm"
+                                            [disabled]="sensors.length <= 1">Remove Sensor</button>
                                     </div>
                                 </div>
 
@@ -1331,6 +1493,11 @@
                             </form>
                         </div>
                     </div>
+                    <div class="card-footer add-device-footer-custom">
+                        <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                            Save & Next
+                        </button>
+                    </div>
                 </div>
 
                 <div *ngIf="activeSettingTab === 'RF'" class="general-settings-card">
@@ -1449,25 +1616,28 @@
                                             Switch</label>
                                     </div>
                                 </div>
+                                <h6>Ingress Switch Attenuation</h6>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Ingress Switch Attenuation Min Value</label>
+                                        <label class="form-label-right">Min Value</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Ingress Switch Attenuation Max Value</label>
+                                        <label class="form-label-right">Max Value</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Ingress Switch Attenuation Step Size</label>
-                                        <input type="number" class="form-input-small">
+                                        <label class="form-label-right">Step Size</label>
+                                        <input type="number" class="form-input-single">
                                     </div>
+                                </div>
+                                <div class="form-row">
                                     <div class="form-group-custom">
                                         <label class="form-label-right">RF Level Control Type</label>
                                         <select id="rfLevelControlType" name="rfLevelControlType"
-                                            [(ngModel)]="rfLevelControlType" class="form-input-small form-dropdown">
+                                            [(ngModel)]="rfLevelControlType" class="form-dropdown-single form-dropdown">
                                             <option value="1">Other</option>
                                             <option value="2">Unknown</option>
                                             <option value="3">Quasi AGC</option>
@@ -1476,22 +1646,20 @@
                                         </select>
                                     </div>
                                 </div>
+                                <h6>Thermal Level Control</h6>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Thermal Level Control Select Range Min
-                                            Value</label>
+                                        <label class="form-label-right">Min Range Value</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Thermal Level Control Select Range Max
-                                            Value</label>
+                                        <label class="form-label-right">Max Range Value</label>
                                         <input type="number" class="form-input-small">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group-custom">
-                                        <label class="form-label-right">Thermal Level Control Select Range Step
-                                            Size</label>
+                                        <label class="form-label-right">Range Step Size</label>
                                         <input type="number" class="form-input-single">
                                     </div>
                                 </div>
@@ -1821,7 +1989,7 @@
                                     </div>
                                     <div class="form-group-custom">
                                         <label class="form-label-right">Attenuation</label>
-                                        <input type="number" class="form-input-single" id="attenuation"
+                                        <input type="number" class="form-input-small" id="attenuation"
                                             name="attenuation" [(ngModel)]="attenuation">
                                     </div>
                                 </div>
@@ -1866,6 +2034,11 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                    <div class="card-footer add-device-footer-custom">
+                        <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                            Save & Next
+                        </button>
                     </div>
                 </div>
 
@@ -1939,9 +2112,209 @@
                             </form>
                         </div>
                     </div>
+                    <div class="card-footer add-device-footer-custom">
+                        <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                            Save & Next
+                        </button>
+                    </div>
                 </div>
 
+                <div *ngIf="activeSettingTab === 'PNM'" class="general-settings-card">
+                    <div class="scte-list-container">
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('pnmStatus')">
+                            <span class="section-title">PNM Status</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'pnmStatus' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'pnmStatus'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">PNM Test Status</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Test ID</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Type</label>
+                                        <select id="pnmType" name="pnmType" [(ngModel)]="pnmType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="0">Other</option>
+                                            <option value="1">Us Spectrum Capture</option>
+                                            <option value="2">Ds Spectrum Capture</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Measurement Status</label>
+                                        <select id="measStatusType" name="measStatusType" [(ngModel)]="measStatusType"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Other</option>
+                                            <option value="2">Inactive</option>
+                                            <option value="3">Busy</option>
+                                            <option value="4">Sample Ready</option>
+                                            <option value="5">Error</option>
+                                            <option value="6">Resource Unavailable</option>
+                                            <option value="7">Sample Truncated</option>
+                                            <option value="8">Interface Modification</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Remote Server Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Destination Filename</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('pnmResult')">
+                            <span class="section-title">PNM Result</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'pnmResult' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'pnmResult'" class="section-content-container">
+                            <form class="settings-form">
+                                <h4 class="settings-sub-heading">PNM Test Measurement</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Test ID</label>
+                                        <input type="number" class="form-input-single">
+                                    </div>
+                                </div>
+
+                                <h4 class="settings-sub-heading">PNM Test Meas Header</h4>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">File Type</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Major Version</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Minor Version</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Capture Time</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Unique ID</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Management IP</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Port Index</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Direction</label>
+                                        <select id="direction" name="direction" [(ngModel)]="direction"
+                                            class="form-input-small form-dropdown">
+                                            <option value="1">Upstream</option>
+                                            <option value="2">Downstream</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="collapsible-section" (click)="toggleSCTESystemRow('pnmRfSpectrumCaptureCfg')">
+                            <span class="section-title">PNM RF Spectrum Capture Cfg</span>
+                            <mat-icon>{{ expandedSCTESystemRow === 'pnmRfSpectrumCaptureCfg' ? 'keyboard_arrow_up' :
+                                'keyboard_arrow_down' }}</mat-icon>
+                        </div>
+                        <div *ngIf="expandedSCTESystemRow === 'pnmRfSpectrumCaptureCfg'"
+                            class="section-content-container">
+                            <form class="settings-form">
+                                <!-- <h4 class="settings-sub-heading">PNM Test Meas Header</h4> -->
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">RF Port Index</label>
+                                        <input type="string" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Inactivity Timeout</label>
+                                        <input type="number" class="form-input-small" id="inactivityTimeout"
+                                            name="inactivityTimeout" [(ngModel)]="inactivityTimeout">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">First Segment Center Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Last Segment Center Freq</label>
+                                        <input type="number" class="form-input-small">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Segment Frequency Span</label>
+                                        <input type="number" class="form-input-small" id="segmentFrequencySpan"
+                                            name="segmentFrequencySpan" [(ngModel)]="segmentFrequencySpan">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Num Bins Per Segment</label>
+                                        <input type="number" class="form-input-small" id="numBinsPerSegment"
+                                            name="numBinsPerSegment" [(ngModel)]="numBinsPerSegment">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Equivalent Noise Bandwidth</label>
+                                        <input type="number" class="form-input-small" id="equivalentNoiseBandwidth"
+                                            name="equivalentNoiseBandwidth" [(ngModel)]="equivalentNoiseBandwidth">
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Window Function</label>
+                                        <select id="windowFunction" name="windowFunction" [(ngModel)]="windowFunction"
+                                            class="form-input-small form-dropdown">
+                                            <option value="0">Other</option>
+                                            <option value="1">Hann</option>
+                                            <option value="2">Blackman Harris</option>
+                                            <option value="3">Rectangular</option>
+                                            <option value="4">Hamming</option>
+                                            <option value="5">Flat Top</option>
+                                            <option value="6">Gaussian</option>
+                                            <option value="7">Chebyshev</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-right">Num Averages</label>
+                                        <input type="number" class="form-input-single" id="numAverages"
+                                            name="numAverages" [(ngModel)]="numAverages">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-footer add-device-footer-custom">
+                        <button (click)="saveAndNext()" class="btn btn-primary save-btn-custom">
+                            Save & Next
+                        </button>
+                    </div>
+                </div>
 
                 <app-alert-modal *ngIf="modalConfig.show" [message]="modalConfig.message"
                     [isError]="modalConfig.isError" [showCancelButton]="modalConfig.showCancelButton"

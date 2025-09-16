@@ -257,6 +257,7 @@ $card-border-color: #F0F0F0;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
     align-items: center;
+    margin-right: 2.5rem;
 }
 
 /* Custom styling for form-check-input (checkbox) */
@@ -632,7 +633,7 @@ $card-border-color: #F0F0F0;
 // Main container for the form
 .settings-form {
     padding-top: 1rem;
-    padding-left: 1rem;
+    // padding-left: 1rem;
 }
 
 // Sub-heading style
@@ -646,14 +647,91 @@ $card-border-color: #F0F0F0;
     &:first-of-type {
         margin-top: 0;
     }
+
+    .add-icon-custom {
+        color: #4CAF50; /* A green color for the '+' icon */
+        cursor: pointer;
+        font-size: 24px;
+        margin-left: 2rem; /* Adds space between the text and the icon */
+        margin-bottom: -0.5rem;
+    
+        &:hover {
+          color: #388E3C; /* Darker green on hover */
+        }
+
+        &.disabled {
+            color: #ccc;  // A light gray color
+            cursor: not-allowed;
+          }
+      }
 }
+
+h6 {
+    font-size: 0.95rem;
+    // font-weight: bold;
+    color: $dark-blue-text;
+    margin-top: 2rem;
+    // margin-bottom: 1rem;
+    margin-left: 1.5rem;
+    // padding-left: -10px;
+    &:first-of-type {
+        margin-top: 0;
+    }
+}
+
+.btn.btn-danger {
+    background-color: #dc3545; /* Red color for danger/remove action */
+    color: white;
+    border: 1px solid #dc3545;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  
+    &:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+    }
+
+    &[disabled] {
+        background-color: #e9e9e9; // A light gray color
+        color: #a0a0a0;            // Gray text
+        cursor: not-allowed;
+        border-color: #e9e9e9;
+      }
+  }
+
+  // Styles for a small button variant
+.btn.btn-sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  // A margin to separate the remove button from the form fields above it
+  .remove-button-row {
+    margin-top: 2rem;
+  }
+  
+  // Add a line or border for visual separation of each sensor form
+  .form-row:last-child {
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    // border-bottom: 1px dashed #ccc; // Light dashed line
+  }
+  
+  // The last sensor form should not have a bottom border
+  div[ng-reflect-ng-for-of]:last-child .form-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
 
 // Two-column layout container
 .form-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem; // Space between columns
+    gap: 1rem; // Space between columns
     margin-bottom: 1rem; // Space between rows
+
 }
 
 // Individual form group for label and input
@@ -697,7 +775,7 @@ $card-border-color: #F0F0F0;
     font-size: 0.95rem;
     color: #333;
     height: 38px;
-    width: 28%; // Takes up remaining space in the form group
+    width: 29.5%; // Takes up remaining space in the form group
     &:focus {
         border-color: $input-focus-border;
         box-shadow: 0 0 0 0.1rem $input-focus-shadow;
@@ -712,7 +790,7 @@ $card-border-color: #F0F0F0;
     font-size: 0.95rem;
     color: #333;
     height: 38px;
-    width: 30% !important; // Takes up remaining space in the form group
+    width: 31.5% !important; // Takes up remaining space in the form group
     &:focus {
         border-color: $input-focus-border;
         box-shadow: 0 0 0 0.1rem $input-focus-shadow;
@@ -802,3 +880,5 @@ $card-border-color: #F0F0F0;
     border-bottom-right-radius: 0.5rem;
     margin-bottom: 1rem;
 }
+
+

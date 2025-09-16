@@ -3,6 +3,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import { AppService } from '../../../app.service';
 
+
+interface Sensor {
+  id: string | null;
+  name: string | null;
+  sensorType: string;
+  scale: string;
+  precision: number | null;
+  value: number | null;
+  operStatusType: string;
+  unitsDisplay: string | null;
+  valueTimeStamp: string | null;
+  valueUpdateRate: number | null;
+}
+
 @Component({
   selector: 'app-add-device',
   templateUrl: './add-device.component.html',
@@ -13,6 +27,7 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   activeVerticalTab: 'General' | 'SCTE283' | 'LoRaWAN' = 'General';
   activeSettingTab: string = 'Activation';
   private loRaWANTabSequence: string[] = ['Activation', 'Class', 'Frame settings', 'Features', 'Location', 'Payload'];
+  private scte283TabSequence: string[] = ['System', 'RF', 'Networking', 'PNM'];
   isScte283: boolean = false;
 
   deviceId: string | null = null;
@@ -112,6 +127,16 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   adminStatusType: string = '1';
   state: string = '1';
   attenuation: number = 0;
+  pnmType: string = '0';
+  measStatusType: string = '1';
+  direction: string = '1';
+  inactivityTimeout: number = 300;
+  segmentFrequencySpan: number = 0;
+  numBinsPerSegment: number = 256;
+  equivalentNoiseBandwidth: number = 150;
+  numAverages: number = 1;
+  windowFunction: string = '0';
+  
 
   // Replaced message and isError with a single config object
   modalConfig = {
@@ -127,6 +152,9 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   private deviceCreatedForSession: boolean = false;
 
   expandedSCTESystemRow: string | null = null;
+  deviceType: any;
+
+  sensors: Sensor[] = [];
 
   constructor(private router: Router, private appService: AppService, private route: ActivatedRoute) { }
 
@@ -137,6 +165,7 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
           this.isScte283 = true;
           this.activeVerticalTab = 'General';
           this.activeSettingTab = 'System';
+          this.addSensor();
       } else {
           this.isScte283 = false;
           this.activeVerticalTab = 'General';
@@ -178,6 +207,18 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   // New method to close the modal, triggered by the 'confirm' event
   onModalClose(): void {
     this.modalConfig.show = false;
+  }
+
+  isFirstSensorValid(): boolean {
+    if (this.sensors.length > 0) {
+      const firstSensor = this.sensors[0];
+      // Check for a value in any of the primary fields.
+      // This is more robust than checking just one field.
+      if (firstSensor.id || firstSensor.name || firstSensor.unitsDisplay) {
+        return true;
+      }
+    }
+    return false;
   }
   
   setActiveVerticalTab(tabName: 'General' | 'SCTE283' | 'LoRaWAN'): void {
@@ -240,6 +281,25 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  addSensor(): void {
+    this.sensors.push({
+      id: null,
+      name: null,
+      sensorType: '1', // Default value
+      scale: '1',      // Default value
+      precision: null,
+      value: null,
+      operStatusType: '1', // Default value
+      unitsDisplay: null,
+      valueTimeStamp: null,
+      valueUpdateRate: null
+    });
+  }
+
+  removeSensor(index: number): void {
+    this.sensors.splice(index, 1);
+  }
+
   /**
    * Private helper to encapsulate the save/update API call logic.
    * @returns The Observable from the service call.
@@ -284,7 +344,9 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
         latitude: this.latitude,
         longitude: this.longitude,
         altitude: this.altitude
-      }
+      },
+
+      sensors: this.sensors
     };
 
     console.log('Attempting to save/update device:', newDeviceData);
@@ -297,38 +359,7 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * Saves the current tab's data and navigates to the next tab.
-   */
-  
   /*
-  saveAndNext(): void {
-    if (!this.name || !this.devEUI || !this.selectedGateway || !this.region) {
-      console.warn('Please fill in Name, DevEUI, Gateway, and Region in the General tab before proceeding.');
-      this.showModal('Please fill in Name, DevEUI, Gateway, and Region in the General tab before proceeding.', true);
-      this.activeSettingTab = 'General';
-      return;
-    }
-
-    this._saveDevice().subscribe({
-      next: (response) => {
-        console.log('Device saved successfully!', response);
-        this.deviceCreatedForSession = true;
-        const currentIndex = this.tabSequence.indexOf(this.activeSettingTab);
-        if (currentIndex < this.tabSequence.length - 1) {
-          const nextTab = this.tabSequence[currentIndex + 1];
-          this.setActiveTab(nextTab);
-        }
-      },
-      error: (error) => {
-        console.error('Error saving device:', error);
-        this.showModal('Failed to save device. Check console for details.', true);
-      }
-    });
-  }
-    */
-
-
   saveAndNext(): void {
     if (this.activeVerticalTab === 'General') {
       // Check if General tab fields are filled
@@ -374,6 +405,65 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+    */
+
+
+  /**
+   * Saves the current tab's data and navigates to the next tab based on the active vertical tab.
+   */
+  saveAndNext(): void {
+    // Check if General tab fields are filled before proceeding from any tab
+    if (!this.name || !this.devEUI || !this.selectedGateway || !this.region) {
+      this.showModal('Please fill in Name, DevEUI, Gateway, and Region in the General tab before proceeding.', true);
+      this.activeVerticalTab = 'General';
+      return;
+    }
+
+    this._saveDevice().subscribe({
+      next: (response) => {
+        console.log('Device settings saved successfully!', response);
+        this.deviceCreatedForSession = true;
+
+        // Logic for navigation based on the active vertical tab
+        if (this.activeVerticalTab === 'General') {
+            // When coming from the General tab
+            if (this.isScte283) {
+                // If SCTE283 is selected, move to its first horizontal tab
+                this.setActiveVerticalTab('SCTE283');
+                this.setActiveSCTETab(this.scte283TabSequence[0]);
+            } else {
+                // Otherwise, move to LoRaWAN's first horizontal tab
+                this.setActiveVerticalTab('LoRaWAN');
+                this.setActiveLoRaWANTab(this.loRaWANTabSequence[0]);
+            }
+        } else if (this.activeVerticalTab === 'SCTE283') {
+            // When navigating within the SCTE283 tabs
+            const currentIndex = this.scte283TabSequence.indexOf(this.activeSettingTab);
+            if (currentIndex < this.scte283TabSequence.length - 1) {
+                // Move to the next horizontal tab within SCTE283
+                const nextTab = this.scte283TabSequence[currentIndex + 1];
+                this.setActiveSCTETab(nextTab);
+            } else {
+                // When we are on the last SCTE283 tab (PNM), move to the LoRaWAN tab
+                this.setActiveVerticalTab('LoRaWAN');
+                this.setActiveLoRaWANTab(this.loRaWANTabSequence[0]);
+            }
+        } else if (this.activeVerticalTab === 'LoRaWAN') {
+            // When navigating within the LoRaWAN tabs
+            const currentIndex = this.loRaWANTabSequence.indexOf(this.activeSettingTab);
+            if (currentIndex < this.loRaWANTabSequence.length - 1) {
+                const nextTab = this.loRaWANTabSequence[currentIndex + 1];
+                this.setActiveLoRaWANTab(nextTab);
+            }
+        }
+      },
+      error: (error) => {
+        console.error('Error saving device settings:', error);
+        this.showModal('Failed to save device settings. Check console for details.', true);
+      }
+    });
+  }
+  
 
   /**
    * Saves the device and navigates to the device list page.
@@ -436,6 +526,9 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.setActiveTab('General');
     this.activeVerticalTab = 'General';
     this.setActiveLoRaWANTab('Activation');
+
+    this.sensors = [];
+    this.addSensor();
   }
 
   // NOTE: The methods below are unchanged from the original file.
