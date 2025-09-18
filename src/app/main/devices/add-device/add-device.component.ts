@@ -3,6 +3,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
 import { AppService } from '../../../app.service';
 
+// Assume this service is created in a separate file (e.g., device-cache.service.ts)
+// This service stores temporary data.
+import { DeviceCacheService } from '../device-cache.sevice';
+
 
 interface Sensor {
   id: string | null;
@@ -23,7 +27,7 @@ interface Sensor {
   styleUrls: ['./add-device.component.scss']
 })
 export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
-  
+
   activeVerticalTab: 'General' | 'SCTE283' | 'LoRaWAN' = 'General';
   activeSettingTab: string = 'Activation';
   private loRaWANTabSequence: string[] = ['Activation', 'Class', 'Frame settings', 'Features', 'Location', 'Payload'];
@@ -84,6 +88,9 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   mType: 'ConfirmedDataUp' | 'UnConfirmedDataUp' = 'ConfirmedDataUp';
   payloadContent: string = '';
   base64Encoded: boolean = false;
+  system: boolean = false;
+  fault: boolean = false;
+  pnm: boolean = false;
 
   // Location Settings
   latitude: number = 1;
@@ -99,6 +106,7 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   private map: L.Map | undefined;
   private marker: L.Marker | undefined;
 
+  // SCTE283 Settings
   amplifierType: string = '1';
   redundancyMode: string = '1';
   currentTime: string = new Date().toLocaleString();
@@ -108,16 +116,16 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   type: string = '1';
   evPriorityType: string = '1';
   neType: string = 'scte279amp';
-  ipAddressOriginType: string = '1';
+  ipAddressOriginType: string = '1'
   eventThrottleAdminStateType: string = '1'
   threshold: number = 10;
   interval: number = 10;
   evReportingType: string = '1';
   fileType: string = '1';
-  fileStatus: string = '1';
+  // fileStatus: string = '1';
   protocol: string = '1';
   rfSpectrumCapture: string = '0';
-  rfLevelControlType: string = '1'; 
+  rfLevelControlType: string = '1';
   agcType: string = '1';
   usDsType: string = '1';
   location: string = '1';
@@ -136,7 +144,276 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   equivalentNoiseBandwidth: number = 150;
   numAverages: number = 1;
   windowFunction: string = '0';
-  
+
+  system_capabilities: {
+    amplifier_type: string;
+    supports_power_supply_redundancy: boolean;
+    power_supply_redundancy_mode: string;
+    supports_power_saving_mode: boolean;
+    supports_rf_config_file: boolean;
+    supports_debug_file: boolean;
+    supports_rf_spectrum_capture: boolean;
+  } = {
+      amplifier_type: '1',
+      supports_power_supply_redundancy: false,
+      power_supply_redundancy_mode: '1',
+      supports_power_saving_mode: false,
+      supports_rf_config_file: false,
+      supports_debug_file: false,
+      supports_rf_spectrum_capture: false,
+    };
+
+  systemStatus: {
+    unique_id: string;
+    current_date_time: string;
+    up_time: string;
+  } = {
+      unique_id: '',
+      current_date_time: '',
+      up_time: '',
+    };
+  identification: {
+    model_number: string;
+    serial_number: string;
+    device_alias: string;
+    device_description: string;
+  } = {
+      model_number: '',
+      serial_number: '',
+      device_alias: '',
+      device_description: ''
+    };
+  vendor: {
+    name: string;
+    oui: string;
+  } = {
+      name: '',
+      oui: ''
+    };
+  versionSummary: {
+    current_sw_version: string;
+    boot_rom_version: string;
+    hw_version: string;
+  } = {
+      current_sw_version: '',
+      boot_rom_version: '',
+      hw_version: ''
+    };
+  enclosure: {
+    is_open: boolean;
+  } = {
+      is_open: false
+    };
+  powerSupply: {
+    id: number | null;
+    description: string;
+    oper_status: string;
+    input_voltage: number | null;
+    input_current: number | null;
+  } = {
+      id: null,
+      description: '',
+      oper_status: '1',
+      input_voltage: null,
+      input_current: null
+    };
+  outputRail: {
+    id: number | null;
+    description: string;
+    oper_status: string;
+    voltage: number | null;
+    current: number | null;
+  } = {
+      id: null,
+      description: '',
+      oper_status: '1',
+      voltage: null,
+      current: null
+    };
+
+  sensors: {
+    id: number | null;
+    name: string | null;
+    sensor_type: string | '1';
+    scale: string | '1';
+    precision: number | null;
+    value: number | null;
+    oper_status: string | '1';
+    units_display: string | null;
+    value_time_stamp: string | null;
+    value_update_rate: number | null;
+  }[] = [];
+
+  systemCfg: {
+    hostname: string;
+    asset_id: string;
+    description: string;
+    cascade_position: number | null
+  } = {
+      hostname: '',
+      asset_id: '',
+      description: '',
+      cascade_position: null
+    }
+
+  locationscte: {
+    description: string;
+    latitude: string;
+    longitude: string;
+  } = {
+      description: '',
+      latitude: '',
+      longitude: ''
+    }
+
+  resetCapabilities: {
+    reset_types_supported: string;
+    reset_history_size: number | null
+  } = {
+      reset_types_supported: '1',
+      reset_history_size: null
+    }
+
+  resetHistoryStatus: {
+    index: number | null;
+    reset_timestamp: string;
+    type: string;
+    reason: string;
+    event_id_ref: number | null;
+    recovery_time: number | null
+  } = {
+      index: null,
+      reset_timestamp: '',
+      type: '1',
+      reason: '',
+      event_id_ref: null,
+      recovery_time: null
+    }
+
+  eventCapabilities: {
+    local_event_log_max_size: number | null;
+  } = {
+      local_event_log_max_size: null,
+    };
+
+  eventStatus: {
+    throttle_threshold_exceeded: boolean;
+  } = {
+      throttle_threshold_exceeded: false,
+    };
+
+  event: {
+    index: number | null;
+    first_time: string;
+    last_time: string;
+    level: string;
+    id: string;
+    text: string;
+  } = {
+      index: null,
+      first_time: '',
+      last_time: '',
+      level: '1',
+      id: '',
+      text: '',
+    };
+
+  syslog: {
+    level: string;
+    timestamp: string;
+    hostname: string;
+    ne_type: string;
+    vendor: string;
+    event_id: string;
+    text: string;
+    vendor_specific_text: string;
+  } = {
+      level: '',
+      timestamp: '',
+      hostname: '',
+      ne_type: '',
+      vendor: '',
+      event_id: '',
+      text: '',
+      vendor_specific_text: '',
+    };
+
+  eventSyslogStatus: {
+    index: number | null;
+    server_address: string;
+    address_origin: string;
+  } = {
+      index: null,
+      server_address: '',
+      address_origin: '1',
+    };
+
+  eventThrottleCfg: {
+    admin_state: string;
+    threshold: number | null;
+    interval: number | null;
+  } = {
+      admin_state: '1',
+      threshold: null,
+      interval: null
+    };
+
+  eventReportingCfg: {
+    priority: string;
+    reporting: boolean;
+  } = {
+      priority: '1',
+      reporting: false
+    };
+
+  syslogServerCfg: {
+    index: number | null;
+    server_address: string;
+    admin_state: string;
+  } = {
+      index: null,
+      server_address: '',
+      admin_state: '1'
+    };
+
+  fileCapabilities: {
+    num_debug_files_supported: number | null;
+    num_rf_cfg_files_supported: number | null;
+    num_rf_spectrum_capture_files_supported: number | null;
+  } = {
+      num_debug_files_supported: null,
+      num_rf_cfg_files_supported: null,
+      num_rf_spectrum_capture_files_supported: null
+    };
+
+  fileStatus: {
+    filename: string;
+    file_type: string;
+    file_status: string;
+    date_created: string;
+  } = {
+      filename: '',
+      file_type: '1',
+      file_status: '1',
+      date_created: ''
+    };
+
+  dataTransferCfg: {
+    remote_server_index: number | null;
+    remote_server_host: string;
+    remote_server_port: number | null;
+    remot_server_base_uri: string;
+    protocol: string;
+    local_store: boolean;
+  } = {
+      remote_server_index: null,
+      remote_server_host: '',
+      remote_server_port: null,
+      remot_server_base_uri: '',
+      protocol: '1',
+      local_store: false
+    };
+
 
   // Replaced message and isError with a single config object
   modalConfig = {
@@ -146,32 +423,34 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     showCancelButton: false, // Simple alerts don't need a cancel button
   };
 
-  // activeSettingTab: string = 'General';
-  // private tabSequence: string[] = ['General', 'Activation', 'Class', 'Frame settings', 'Features', 'Location', 'Payload'];
-
   private deviceCreatedForSession: boolean = false;
 
   expandedSCTESystemRow: string | null = null;
   deviceType: any;
 
-  sensors: Sensor[] = [];
+  // sensors: Sensor[] = [];
 
-  constructor(private router: Router, private appService: AppService, private route: ActivatedRoute) { }
+  constructor(
+    private router: Router,
+    private appService: AppService,
+    private route: ActivatedRoute,
+    private deviceCacheService: DeviceCacheService // Inject the new service
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       const deviceType = params.get('deviceType');
       if (deviceType === 'SCTE283') {
-          this.isScte283 = true;
-          this.activeVerticalTab = 'General';
-          this.activeSettingTab = 'System';
-          this.addSensor();
+        this.isScte283 = true;
+        this.activeVerticalTab = 'General';
+        this.activeSettingTab = 'System';
+        this.addSensor();
       } else {
-          this.isScte283 = false;
-          this.activeVerticalTab = 'General';
-          this.activeSettingTab = 'Activation';
+        this.isScte283 = false;
+        this.activeVerticalTab = 'General';
+        this.activeSettingTab = 'Activation';
       }
-  });
+    });
 
     this.appService.getGateways().subscribe({
       next: (response) => {
@@ -180,8 +459,6 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (err) => {
         console.error('Failed to fetch gateways:', err);
-        // Using the new modal method for API errors
-        // this.showModal('Failed to fetch gateways. Please try again.', true);
       },
     });
   }
@@ -214,13 +491,13 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
       const firstSensor = this.sensors[0];
       // Check for a value in any of the primary fields.
       // This is more robust than checking just one field.
-      if (firstSensor.id || firstSensor.name || firstSensor.unitsDisplay) {
+      if (firstSensor.id || firstSensor.name || firstSensor.units_display) {
         return true;
       }
     }
     return false;
   }
-  
+
   setActiveVerticalTab(tabName: 'General' | 'SCTE283' | 'LoRaWAN'): void {
     this.activeVerticalTab = tabName;
     console.log(`Switched to vertical tab: ${tabName}`);
@@ -285,14 +562,14 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sensors.push({
       id: null,
       name: null,
-      sensorType: '1', // Default value
-      scale: '1',      // Default value
+      sensor_type: '1', // Default value
+      scale: '1',     // Default value
       precision: null,
       value: null,
-      operStatusType: '1', // Default value
-      unitsDisplay: null,
-      valueTimeStamp: null,
-      valueUpdateRate: null
+      oper_status: '1', // Default value
+      units_display: null,
+      value_time_stamp: null,
+      value_update_rate: null
     });
   }
 
@@ -301,17 +578,18 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Private helper to encapsulate the save/update API call logic.
-   * @returns The Observable from the service call.
+   * Private helper to consolidate data for API call.
    */
-  private _saveDevice() {
-    const newDeviceData = {
+  private createFinalDevicePayload(): any {
+
+    const lorawanData = {
+      lorawan: {
       isDeviceActive: this.active,
       name: this.name,
       devEUI: this.devEUI,
       region: this.region,
       gateway: this.selectedGateway?.name,
-      gwEUI: this.selectedGateway?.macAddress,  
+      gwEUI: this.selectedGateway?.macAddress,
       otaaSupported: this.otaaSupported,
       appKey: this.appKey,
       devAddr: this.devAddr,
@@ -339,77 +617,98 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
       payloadExceedsAction: this.payloadExceedsAction,
       mType: this.mType,
       payloadContent: this.payloadContent,
+      payload: {
+        system: this.system,
+        fault: this.fault,
+        pnm: this.pnm
+      },
       base64Encoded: this.base64Encoded,
       location: {
         latitude: this.latitude,
         longitude: this.longitude,
         altitude: this.altitude
       },
+    }
+    };
 
+    const scte283Data = {
+      Scte279Amplifier:{
+      system_grp: {
+        SystemCapabilitiesGrp: {
+          system_capabilities: this.system_capabilities,
+        },
+        system_status_grp: {
+          SystemStatus: this.systemStatus,
+          Identification: this.identification,
+          Vendor: this.vendor,
+          VersionSummary: this.versionSummary,
+          Enclosure: this.enclosure,
+          Sensor: this.sensors.map(s => ({
+            Id: s.id,
+            Name: s.name,
+            SensorType: s.sensor_type,
+            Scale: s.scale,
+            Precision: s.precision,
+            Value: s.value,
+            OperStatus: s.oper_status,
+            UnitsDisplay: s.units_display,
+            ValueTimeStamp: s.value_time_stamp,
+            ValueUpdateRate: s.value_update_rate
+          })),
+          PowerSupply: this.powerSupply,
+          OutputRail: this.outputRail
+        },
+        system_cfg_grp: {
+          systemCfg: this.systemCfg,
+          locationscte: this.locationscte
+        },
+        reset_status_grp: {
+          resetCapabilities: this.resetCapabilities,
+          resetHistoryStatus: this.resetHistoryStatus
+        },
+        event_status_grp: {
+          event_status_grp: {
+            event_capabilities: this.eventCapabilities,
+            event_status: this.eventStatus,
+            event: this.event,
+            syslog: this.syslog,
+            event_syslog_status: this.eventSyslogStatus
+          },
+        },
+        event_cfg_grp: {
+          event_throttle_cfg: this.eventThrottleCfg,
+          event_reporting_cfg: this.eventReportingCfg,
+          syslog_server_cfg: this.syslogServerCfg
+        },
+        file_management: {
+          file_capabilities: this.fileCapabilities,
+          file_status: this.fileStatus,
+          data_transfer_cfg: this.dataTransferCfg
+        }
+      },
+      rf_grp: {
+        rf_capabilities_grp: {},
+        rf_status_grp: {},
+        rf_cfg_group: {}
+      },
+      networking_grp: {},
+      pnm_grp: {},
+    }
+    };
+
+    // Build the final payload by merging the collected data
+    const finalPayload = {
+      ...(this.isScte283 ? { Scte279Amplifier: scte283Data } : { lorawan: lorawanData }),
       sensors: this.sensors
     };
 
-    console.log('Attempting to save/update device:', newDeviceData);
-
-    // Call either create or update based on the flag
-    if (!this.deviceCreatedForSession) {
-      return this.appService.createDevice(newDeviceData);
-    } else {
-      return this.appService.updateDevice(this.devEUI, newDeviceData);
-    }
+    console.log('Final Payload for API:', finalPayload);
+    return finalPayload;
   }
-
-  /*
-  saveAndNext(): void {
-    if (this.activeVerticalTab === 'General') {
-      // Check if General tab fields are filled
-      if (!this.name || !this.devEUI || !this.selectedGateway || !this.region) {
-        this.showModal('Please fill in Name, DevEUI, Gateway, and Region in the General tab before proceeding.', true);
-        return; // Stay on the General tab
-      }
-
-      this._saveDevice().subscribe({
-        next: (response) => {
-          console.log('General settings saved successfully!', response);
-          this.deviceCreatedForSession = true;
-          // Switch to the LoRaWAN vertical tab and activate the first horizontal tab
-          this.setActiveVerticalTab('LoRaWAN');
-        },
-        error: (error) => {
-          console.error('Error saving general settings:', error);
-          this.showModal('Failed to save general settings. Check console for details.', true);
-        }
-      });
-
-    } else if (this.activeVerticalTab === 'LoRaWAN') {
-      if (!this.name || !this.devEUI || !this.selectedGateway || !this.region) {
-        console.warn('Please fill in Name, DevEUI, Gateway, and Region in the General tab before proceeding.');
-        this.showModal('Please fill in Name, DevEUI, Gateway, and Region in the General tab before proceeding.', true);
-        this.activeVerticalTab = 'General';
-        return;
-      }
-      // Logic for navigating between horizontal tabs
-      this._saveDevice().subscribe({
-        next: (response) => {
-          console.log('LoRaWAN settings saved successfully!', response);
-          const currentIndex = this.loRaWANTabSequence.indexOf(this.activeSettingTab);
-          if (currentIndex < this.loRaWANTabSequence.length - 1) {
-            const nextTab = this.loRaWANTabSequence[currentIndex + 1];
-            this.setActiveLoRaWANTab(nextTab);
-          }
-        },
-        error: (error) => {
-          console.error('Error saving LoRaWAN settings:', error);
-          this.showModal('Failed to save device settings. Check console for details.', true);
-        }
-      });
-    }
-  }
-    */
-
 
   /**
-   * Saves the current tab's data and navigates to the next tab based on the active vertical tab.
+   * Saves the current tab's data into the cache and navigates to the next tab.
+   * No API call is made here.
    */
   saveAndNext(): void {
     // Check if General tab fields are filled before proceeding from any tab
@@ -419,57 +718,44 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this._saveDevice().subscribe({
-      next: (response) => {
-        console.log('Device settings saved successfully!', response);
-        this.deviceCreatedForSession = true;
+    // Capture and cache the data from the current tab
+    // Note: The data is saved to component properties, which acts as a cache.
+    // The final payload is built in createFinalDevicePayload().
 
-        // Logic for navigation based on the active vertical tab
-        if (this.activeVerticalTab === 'General') {
-            // When coming from the General tab
-            if (this.isScte283) {
-                // If SCTE283 is selected, move to its first horizontal tab
-                this.setActiveVerticalTab('SCTE283');
-                this.setActiveSCTETab(this.scte283TabSequence[0]);
-            } else {
-                // Otherwise, move to LoRaWAN's first horizontal tab
-                this.setActiveVerticalTab('LoRaWAN');
-                this.setActiveLoRaWANTab(this.loRaWANTabSequence[0]);
-            }
-        } else if (this.activeVerticalTab === 'SCTE283') {
-            // When navigating within the SCTE283 tabs
-            const currentIndex = this.scte283TabSequence.indexOf(this.activeSettingTab);
-            if (currentIndex < this.scte283TabSequence.length - 1) {
-                // Move to the next horizontal tab within SCTE283
-                const nextTab = this.scte283TabSequence[currentIndex + 1];
-                this.setActiveSCTETab(nextTab);
-            } else {
-                // When we are on the last SCTE283 tab (PNM), move to the LoRaWAN tab
-                this.setActiveVerticalTab('LoRaWAN');
-                this.setActiveLoRaWANTab(this.loRaWANTabSequence[0]);
-            }
-        } else if (this.activeVerticalTab === 'LoRaWAN') {
-            // When navigating within the LoRaWAN tabs
-            const currentIndex = this.loRaWANTabSequence.indexOf(this.activeSettingTab);
-            if (currentIndex < this.loRaWANTabSequence.length - 1) {
-                const nextTab = this.loRaWANTabSequence[currentIndex + 1];
-                this.setActiveLoRaWANTab(nextTab);
-            }
-        }
-      },
-      error: (error) => {
-        console.error('Error saving device settings:', error);
-        this.showModal('Failed to save device settings. Check console for details.', true);
+    // Logic for navigation based on the active vertical tab
+    if (this.activeVerticalTab === 'General') {
+      if (this.isScte283) {
+        this.setActiveVerticalTab('SCTE283');
+        this.setActiveSCTETab(this.scte283TabSequence[0]);
+      } else {
+        this.setActiveVerticalTab('LoRaWAN');
+        this.setActiveLoRaWANTab(this.loRaWANTabSequence[0]);
       }
-    });
+    } else if (this.activeVerticalTab === 'SCTE283') {
+      const currentIndex = this.scte283TabSequence.indexOf(this.activeSettingTab);
+      if (currentIndex < this.scte283TabSequence.length - 1) {
+        this.setActiveSCTETab(this.scte283TabSequence[currentIndex + 1]);
+      } else {
+        this.setActiveVerticalTab('LoRaWAN');
+        this.setActiveLoRaWANTab(this.loRaWANTabSequence[0]);
+      }
+    } else if (this.activeVerticalTab === 'LoRaWAN') {
+      const currentIndex = this.loRaWANTabSequence.indexOf(this.activeSettingTab);
+      if (currentIndex < this.loRaWANTabSequence.length - 1) {
+        this.setActiveLoRaWANTab(this.loRaWANTabSequence[currentIndex + 1]);
+      }
+    }
+    console.log('Data cached, moving to the next tab.');
   }
-  
 
   /**
-   * Saves the device and navigates to the device list page.
+   * Builds the final device payload from all component data and sends it to the API.
+   * On success, navigates to the devices list page.
    */
   saveAndClose(): void {
-    this._saveDevice().subscribe({
+    const devicePayload = this.createFinalDevicePayload();
+
+    this.appService.createDevice(devicePayload).subscribe({
       next: (response) => {
         console.log('Device saved successfully and closing page.', response);
         this.showModal('Device added successfully!', false);
@@ -483,10 +769,13 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Saves the device and then resets the form to add a new one.
+   * Builds the final device payload and sends it to the API.
+   * On success, resets the form to add a new device.
    */
   saveAndNew(): void {
-    this._saveDevice().subscribe({
+    const devicePayload = this.createFinalDevicePayload();
+
+    this.appService.createDevice(devicePayload).subscribe({
       next: (response) => {
         console.log('Device saved successfully. Resetting form for a new device.', response);
         this.showModal('Device added successfully!', false);
@@ -523,7 +812,6 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
     this.longitude = 1;
     this.locationAddress = 'Device Location';
     this.deviceCreatedForSession = false;
-    // this.setActiveTab('General');
     this.activeVerticalTab = 'General';
     this.setActiveLoRaWANTab('Activation');
 
