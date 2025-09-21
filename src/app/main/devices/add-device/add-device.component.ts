@@ -583,7 +583,7 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
   private createFinalDevicePayload(): any {
 
     const lorawanData = {
-      lorawan: {
+     // lorawan: {
       isDeviceActive: this.active,
       name: this.name,
       devEUI: this.devEUI,
@@ -628,11 +628,11 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
         longitude: this.longitude,
         altitude: this.altitude
       },
-    }
+   // }
     };
 
     const scte283Data = {
-      Scte279Amplifier:{
+     // Scte279Amplifier:{
       system_grp: {
         SystemCapabilitiesGrp: {
           system_capabilities: this.system_capabilities,
@@ -693,14 +693,19 @@ export class AddDeviceComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       networking_grp: {},
       pnm_grp: {},
-    }
+    //}
     };
 
     // Build the final payload by merging the collected data
+   // const finalPayload = {
+     // ...(this.isScte283 ? { Scte279Amplifier: scte283Data } : { lorawan: lorawanData }),
+     // sensors: this.sensors
+   // };
+
     const finalPayload = {
-      ...(this.isScte283 ? { Scte279Amplifier: scte283Data } : { lorawan: lorawanData }),
-      sensors: this.sensors
-    };
+       lorawan: lorawanData,
+       ...(this.isScte283 && { Scte279Amplifier: scte283Data })
+    }
 
     console.log('Final Payload for API:', finalPayload);
     return finalPayload;
