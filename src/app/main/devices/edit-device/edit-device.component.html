@@ -1,12 +1,10 @@
 <div class="add-device-page-container card">
     <div class="card-header add-device-header-custom">
-        <!-- <h6 class="card-title add-device-title-custom">Edit Device</h6> -->
         <h6 class="card-title add-device-title-custom">Edit Device / {{ name || '[Device Name]' }}</h6>
     </div>
 
     <div class="card-body add-device-body-custom row no-gutters">
         <div class="col-md-3 add-device-sidebar-custom pr-4 border-end">
-           <!-- <h6 class="sidebar-heading-custom">Device's Setting</h6>-->
             <nav class="nav-vertical-custom">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item tab-item-custom">
@@ -32,22 +30,6 @@
                             Class
                         </a>
                     </li>
-
-                    <!-- <li class="list-group-item tab-item-custom">
-                        <a (click)="setActiveTab('Class B')"
-                            [ngClass]="{'active-tab-link-custom': activeSettingTab === 'Class B'}"
-                            class="list-group-item-action tab-link-custom">
-                            Class B
-                        </a>
-                    </li> -->
-
-                    <!-- <li class="list-group-item tab-item-custom">
-                        <a (click)="setActiveTab('Class C')"
-                            [ngClass]="{'active-tab-link-custom': activeSettingTab === 'Class C'}"
-                            class="list-group-item-action tab-link-custom">
-                            Class C
-                        </a>
-                    </li> -->
 
                     <li class="list-group-item tab-item-custom">
                         <a (click)="setActiveTab('Frame settings')"
@@ -320,24 +302,20 @@
                     </div>
 
                     <h6 class="general-settings-heading">Class B Settings</h6>
-                <!-- <form class="nav-form"> -->
                     <div class="form-group form-check checkbox-group-custom" style="margin-left: 1rem;">
                         <input type="checkbox" class="form-check-input checkbox-input-custom" id="classBSupported" name="classBSupported"
                             [(ngModel)]="classBSupported">
                         <label class="form-check-label checkbox-label-custom" for="classBSupported">Device Supports Class
                             B</label>
                     </div>
-                <!-- </form> -->
 
                 <h6 class="general-settings-heading">Class C Settings</h6>
-                <!-- <form class="nav-form"> -->
                     <div class="form-group form-check checkbox-group-custom" style="margin-left: 1rem;">
                         <input type="checkbox" class="form-check-input checkbox-input-custom" id="classCSupported" name="classCSupported"
                             [(ngModel)]="classCSupported">
                         <label class="form-check-label checkbox-label-custom" for="classCSupported">Device Supports Class
                             C</label>
                     </div>
-                <!-- </form> -->
 
                     <div class="card-footer add-device-footer-custom">
                         <button type="button" class="save-btn-custom btn btn-primary" (click)="updateAndNext()">
@@ -349,46 +327,6 @@
                     </div>
                 </form>
             </div>
-
-            <!-- <div *ngIf="activeSettingTab === 'Class B'" class="general-settings-card">
-                <h6 class="general-settings-heading">Class B Settings</h6>
-                <form class="nav-form">
-                    <div class="form-group form-check checkbox-group-custom">
-                        <input type="checkbox" class="form-check-input checkbox-input-custom" id="active" name="active"
-                            [(ngModel)]="active">
-                        <label class="form-check-label checkbox-label-custom" for="active">Device Supports Class
-                            B</label>
-                    </div>
-                </form>
-                <div class="card-footer add-device-footer-custom">
-                    <button type="button" class="save-btn-custom btn btn-primary" (click)="updateAndNext()">
-                        Update & Next
-                    </button>
-                    <button type="button" class="save-btn-custom btn btn-primary" (click)="updateAndClose()">
-                        Update & Close
-                    </button>
-                </div>
-            </div>
-
-            <div *ngIf="activeSettingTab === 'Class C'" class="general-settings-card">
-                <h6 class="general-settings-heading">Class C Settings</h6>
-                <form class="nav-form">
-                    <div class="form-group form-check checkbox-group-custom">
-                        <input type="checkbox" class="form-check-input checkbox-input-custom" id="active" name="active"
-                            [(ngModel)]="active">
-                        <label class="form-check-label checkbox-label-custom" for="active">Device Supports Class
-                            C</label>
-                    </div>
-                </form>
-                <div class="card-footer add-device-footer-custom">
-                    <button type="button" class="save-btn-custom btn btn-primary" (click)="updateAndNext()">
-                        Update & Next
-                    </button>
-                    <button type="button" class="save-btn-custom btn btn-primary" (click)="updateAndClose()">
-                        Update & Close
-                    </button>
-                </div>
-            </div> -->
 
             <div *ngIf="activeSettingTab === 'Frame settings'" class="general-settings-card">
                 <h6 class="general-settings-heading">Frame Settings</h6>

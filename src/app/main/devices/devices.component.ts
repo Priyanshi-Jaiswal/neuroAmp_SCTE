@@ -45,9 +45,9 @@ export class DevicesComponent implements OnInit {
                 </div>`;
       },
     },
-    { field: "name", headerName: "Name", filter: 'agTextColumnFilter', flex: 2 },
-    { field: "devEUI", headerName: "Device EUI", filter: 'agTextColumnFilter', flex: 2 },
-    { field: "gateway", headerName: "Gateway", filter: 'agTextColumnFilter', flex: 2 },
+    { field: "lorawan.name", headerName: "Name", filter: 'agTextColumnFilter', flex: 2 },
+    { field: "lorawan.devEUI", headerName: "Device EUI", filter: 'agTextColumnFilter', flex: 2 },
+    { field: "lorawan.gateway", headerName: "Gateway", filter: 'agTextColumnFilter', flex: 2 },
     {
       field: "action",
       headerName: "Actions",
@@ -271,7 +271,8 @@ export class DevicesComponent implements OnInit {
     const message = `Are you sure you want to delete ${deviceCount === 1 ? 'this device' : 'these devices'}?`;
 
     this.showModalConfirm(message, () => {
-      const devEUIsToDelete = this.selectedRow.map(device => device.devEUI);
+      const devEUIsToDelete = this.selectedRow.map(device => device.lorawan.devEUI);
+      console.log('device to delete is: ', devEUIsToDelete);
       const deletePromises = devEUIsToDelete.map(id =>
         this.appService.deleteDevice(id).subscribe({
           next: (response) => {
@@ -280,6 +281,8 @@ export class DevicesComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error deleting device:', error);
+            console.log('error in deleting device: ', id);
+            console.log('error in deleting device: ', devEUIsToDelete);
             this.showModalAlert('Failed to delete device. Check console for details.', true);
           },
         })
